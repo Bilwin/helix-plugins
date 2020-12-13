@@ -83,9 +83,9 @@ function ix.XPSystem:IsWhitelisted(pl, faction, class)
 end
 
 local xpgain
-MetaLib.hook:Add("Think", "XPGain::Think", function()
+hook.Add("Think", "XPGain::Think", function()
     xpgain = ix.config.Get("maxXPGain", 0)
-end, "server")
+end)
 
 local delay = 60 * 10 -- Every 10 minutes
 function plugin:PostPlayerLoadout(pl)
