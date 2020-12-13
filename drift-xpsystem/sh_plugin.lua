@@ -2,6 +2,11 @@ local plugin = PLUGIN
 plugin.name = "XP System"
 plugin.author = "Bilwin"
 plugin.description = "..."
+plugin.readme = [[
+    This plugin adds the XP system to the server, if it is enabled.
+    If used correctly, you can make it so that you need to have some XP to select a class.
+    The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
+]]
 
 local ix = ix or {}
 ix.XPSystem = ix.XPSystem or {}
