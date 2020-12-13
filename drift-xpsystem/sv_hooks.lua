@@ -1,5 +1,17 @@
 local plugin = PLUGIN
 
+ix.log.AddType("xpSystemAdd", function(pl, amount)
+    return string.format("%s was added %s XP.", pl:Name(), amount)
+end)
+
+ix.log.AddType("xpSystemSet", function(pl, amount)
+    return string.format("%s was set %s XP.", pl:Name(), amount)
+end)
+
+ix.log.AddType("xpSystemAbort", function(pl)
+    return string.format("%s was abort all XP.", pl:Name())
+end)
+
 local _tonumber = tonumber
 local min, max = 0, 5000
 function ix.XPSystem:AddXP(pl, xp)
@@ -13,6 +25,7 @@ function ix.XPSystem:AddXP(pl, xp)
             else
                 char:SetData("ix:XP", math.Clamp(_tonumber(xp), min, max))
             end
+            ix.log.Add(pl, "xpSystemAdd", math.Clamp(_tonumber(xp), min, max))
             
             ix.util.NotifyLocalized("xpGainTime", pl, math.Clamp(_tonumber(xp), min, max))
         end
@@ -31,6 +44,8 @@ function ix.XPSystem:SetXP(pl, xp)
                 char:SetData("ix:XP", math.Clamp(_tonumber(xp), min, max))
             end
 
+            ix.log.Add(pl, "xpSystemSet", math.Clamp(_tonumber(xp), min, max))
+
             ix.util.NotifyLocalized("xpSet", pl, math.Clamp(_tonumber(xp), min, max))
         end
     end
@@ -46,6 +61,8 @@ function ix.XPSystem:XPAbort(pl)
             else
                 char:SetData("ix:XP", 0)
             end
+
+            ix.log.Add(pl, "xpSystemAbort")
 
             ix.util.NotifyLocalized("xpAborted", pl)
         end
