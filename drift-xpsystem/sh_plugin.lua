@@ -2,6 +2,7 @@ local plugin = PLUGIN
 plugin.name = "XP System"
 plugin.author = "Bilwin"
 plugin.description = "..."
+plugin.license = "Check Git Repo License"
 plugin.readme = [[
     This plugin adds the XP system to the server, if it is enabled.
     If used correctly, you can make it so that you need to have some XP to select a class.
