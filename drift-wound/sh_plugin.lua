@@ -16,4 +16,8 @@ ix.char.RegisterVar("bIsFractured", {
     default = false
 })
 
-ix.util.Include("sv_hooks.lua")
+local ix = ix or {}
+ix.Wounds = ix.Wounds or {}
+
+ix.util.Include("sh_meta.lua", "shared")
+ix.util.Include("sv_hooks.lua", "server")

@@ -15,69 +15,99 @@ function plugin:EntityTakeDamage(target, info)
         if !target:GetCharacter() then return end
         if bullet_damages[info:GetDamageType()] then
             if math.random(10) > 7 then
-                target:GetCharacter():SetData("bIsBleeding", true)
+                ix.Wounds:SetBleeding(target)
             end
         elseif info:GetDamageType() == DMG_FALL then
             if math.random(10) > 7 then
-                target:GetCharacter():SetData("bIsFractured", true)
+                ix.Wounds:SetFracture(target)
             end
         end
     end
 end
 
-local bad_movetypes = {
-    [MOVETYPE_NOCLIP] = true,
-    [MOVETYPE_OBSERVER] = true
-}
-local damage_color = Color(255, 0, 0, 128)
-local ix_config = ix.config.Get
+function plugin:PostPlayerLoadout(pl)
+    local char = pl:GetCharacter() or false
 
-function plugin:PlayerPostThink(pl)
-    if !pl:GetCharacter() then return end
-    if !pl:Alive() then return end
-    if bad_movetypes[pl:GetMoveType()] then return end
+    if not char:IsFractured() then
+        ix.Wounds:RemoveFracture(pl)
+    end
 
-    local _health = pl:Health()
+    if not char:IsBleeding() then
+        ix.Wounds:RemoveBleeding(pl)
+    end
 
-    if pl:GetCharacter():GetData("bIsBleeding") then
-        if (pl.bIsBleeding or 0) < CurTime() then
-            pl:SetHealth(_health - math.random(1,3))
+    if char:IsFractured() then
+        ix.Wounds:SetFracture(pl)
+    end
+
+    if char:IsBleeding() then
+        ix.Wounds:SetBleeding(pl)
+    end
+end
+
+function ix.Wounds:SetBleeding(pl)
+    local char = pl:GetCharacter() or false
+    if IsValid(pl) and char then
+        char:SetData("bIsBleeding", true)
+
+        pl:_SetTimer("bIsBleeding::"..pl:SteamID64(), 7, 0, function()
+            pl:SetHealth(pl:Health() - math.random(1,3))
             pl:EmitSound("player/pl_drown2.wav")
-            pl:ScreenFade(SCREENFADE.IN, damage_color, 0.3, 0 )
+            pl:ScreenFade(SCREENFADE.IN, Color(255, 0, 0, 128), 0.3, 0 )
 
-            if _health <= 0 then
+            if pl:Health() <= 0 then
                 pl:Kill()
+                ix.Wounds:RemoveAllWounds(pl)
             end
+        end)
+    end
+end
 
-            pl.bIsBleeding = CurTime() + 7
-        end
-    elseif pl:GetCharacter():GetData("bIsFractured") then
-        pl:SetWalkSpeed(ix_config("walkSpeed", 100) / 1.4)
-        pl:SetRunSpeed(ix_config("walkSpeed", 100) / 1.4)
-    else
-        if !pl:GetCharacter():GetData("bIsFractured") then
-            pl:SetWalkSpeed(ix_config("walkSpeed", 100))
-            pl:SetRunSpeed(ix_config("runSpeed", 200))
-        elseif !pl:GetCharacter():GetData("bIsBleeding") then
-            pl.bIsBleeding = nil
+function ix.Wounds:SetFracture(pl)
+    local char = pl:GetCharacter() or false
+    if IsValid(pl) and char then
+        char:SetData("bIsFractured", true)
+
+        pl:SetWalkSpeed(ix.config.Get("walkSpeed", 100) / 1.4)
+        pl:SetRunSpeed(ix.config.Get("walkSpeed", 100) / 1.4)
+    end
+end
+
+function ix.Wounds:RemoveBleeding(pl)
+    local char = pl:GetCharacter() or false
+    if IsValid(pl) and char then
+        char:SetData("bIsBleeding", false)
+        if pl:_TimerExists("bIsBleeding::"..pl:SteamID64()) then
+            pl:_RemoveTimer("bIsBleeding::"..pl:SteamID64())
         end
     end
 end
 
-function plugin:DoPlayerDeath(pl, attacker, dmg)
-    if !pl:GetCharacter() then return end
-    if pl:GetCharacter():GetData("bIsBleeding") then
-        pl:GetCharacter():SetData("bIsBleeding", false)
-    elseif pl:GetCharacter():GetData("bIsFractured") then
-        pl:GetCharacter():SetData("bIsFractured", false)
+function ix.Wounds:RemoveFracture(pl)
+    local char = pl:GetCharacter() or false
+    if IsValid(pl) and char then
+        char:SetData("bIsFractured", false)
+
+        pl:SetWalkSpeed(ix.config.Get("walkSpeed", 100))
+        pl:SetRunSpeed(ix.config.Get("runSpeed", 100))
     end
 end
 
-function plugin:PlayerDisconnected(pl)
-    if !pl:GetCharacter() then return end
-    if pl:GetCharacter():GetData("bIsBleeding") and IsValid(pl) then
-        if (pl.bIsBleeding or 0) then
-            pl.bIsBleeding = nil
+function ix.Wounds:RemoveAllWounds(pl)
+    if IsValid(pl) and pl:IsPlayer() then
+        local char = pl:GetCharacter()
+
+        if char then
+            char:SetData("bIsBleeding", false)
+            char:SetData("bIsFractured", false)
+        end
+
+        if pl:_TimerExists("bIsBleeding::"..pl:SteamID64()) then
+            pl:_RemoveTimer("bIsBleeding::"..pl:SteamID64())
         end
     end
+end
+
+function plugin:DoPlayerDeath(pl, _, __)
+    ix.Wounds:RemoveAllWounds(pl)
 end

@@ -12,9 +12,7 @@ ITEM.functions.Apply = {
 		local pl = itemTable.player
 		local char = pl:GetCharacter()
 
-		if char:GetData("bIsFractured") then
-			char:SetData("bIsFractured", false)
-		end
+		ix.Wounds:RemoveFracture(pl)
 	end
 }
 
@@ -32,9 +30,7 @@ ITEM.functions.ApplyTarget = {
 
 		if IsValid(target) and target:IsPlayer() then
 			if target:GetCharacter() then
-				if target:GetCharacter():GetData("bIsFractured") then
-					target:GetCharacter():SetData("bIsFractured", false)
-				end
+				ix.Wounds:RemoveFracture(target)
 
 				return true
 			end

@@ -13,9 +13,7 @@ ITEM.functions.Apply = {
 		local char = pl:GetCharacter()
 
 		if math.random(5) > 2 then
-			if char:GetData("bIsBleeding") then
-				char:SetData("bIsBleeding", false)
-			end
+			ix.Wounds:RemoveBleeding(pl)
 		end
 
 		pl:SetHealth(math.min(pl:Health() + 5, 100))
@@ -37,9 +35,7 @@ ITEM.functions.ApplyTarget = {
 		if IsValid(target) and target:IsPlayer() then
 			if target:GetCharacter() then
 				if math.random(5) > 2 then
-					if target:GetCharacter():GetData("bIsBleeding") then
-						target:GetCharacter():SetData("bIsBleeding", false)
-					end
+					ix.Wounds:RemoveBleeding(target)
 				end
 
 				target:SetHealth(math.min(target:Health() + 50, 100))
