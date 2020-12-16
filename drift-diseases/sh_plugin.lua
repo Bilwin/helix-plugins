@@ -2,6 +2,11 @@ local plugin = PLUGIN
 plugin.name = "Diseases"
 plugin.author = "Bilwin"
 plugin.description = "Adding diseases"
+plugin.license = [[
+    Copyright 2020 Maxim Sukharev (Bilwin)
+    This plugin is protected under by MPL-2.0 license
+    Full copy of license is here: https://www.mozilla.org/en-US/MPL/2.0/
+]]
 plugin.readme = [[
     Sorry for not making a disease system running on meta tables.
     I think I will do it soon.
@@ -22,6 +27,12 @@ plugin.readme = [[
     And GetDisease() be like that
     `blindness`
 ]]
+
+ix.char.RegisterVar("diseaseInfo", { 
+    field = "diseaseInfo",
+    fieldType = ix.type.string,
+    default = ""
+})
 
 local ix = ix or {}
 ix.Diseases = ix.Diseases or {}
