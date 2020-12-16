@@ -2,6 +2,7 @@ local plugin = PLUGIN
 plugin.name = "Diseases"
 plugin.author = "Bilwin"
 plugin.description = "Adding diseases"
+plugin.schema = "any"
 plugin.license = [[
     Copyright 2020 Maxim Sukharev (Bilwin)
     This plugin is protected under by MPL-2.0 license

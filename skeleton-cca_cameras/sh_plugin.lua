@@ -2,6 +2,7 @@ local plugin = PLUGIN
 plugin.name = "CCA Cameras"
 plugin.author = "You're here"
 plugin.description = "..."
+plugin.schema = "HL2 RP"
 plugin.readme = [[
     Example plugin for camera NPC usage
 
