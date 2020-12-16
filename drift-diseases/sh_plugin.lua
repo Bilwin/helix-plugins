@@ -14,6 +14,13 @@ plugin.readme = [[
     This plugin supports Lua Refresh, so you don't have to worry that this particular plugin is causing errors.
     Client-side diseases functions look bad because they couldn't get the function as a string value.
     Also, if you want your disease to work on the client side, add the field `functionsIsClientside = true`.
+
+    Diseases can be stackable like that
+    `cough;blindness` in GetCharacter():GetDisease()
+    And can be removable by stack like
+    `ix.Diseases:DisinfectPlayer(pl, "cough")
+    And GetDisease() be like that
+    `blindness`
 ]]
 
 local ix = ix or {}
