@@ -1,8 +1,7 @@
 local plugin = PLUGIN
 plugin.name = "CCA Cameras"
-plugin.author = "Bilwin"
+plugin.author = "You're here"
 plugin.description = "..."
-plugin.license = "Check Git Repo License"
 plugin.readme = [[
     Example plugin for camera NPC usage
 
