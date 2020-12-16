@@ -146,3 +146,47 @@ function ix.Diseases:RemoveAllDiseases(pl)
         end
     end
 end
+
+--[[
+    Chat Commands
+--]]
+
+
+ix.command.Add("InfectPlayer", {
+    description = "Set Disease for player",
+    adminOnly = true,
+    arguments = {ix.type.player, ix.type.string},
+    argumentNames = {"Target (Player)(SteamID or Name)", "Disease"},
+    OnRun = function(self, pl, target, disease)
+        if not target or not disease then return end
+
+        ix.Diseases:InfectPlayer(target, disease, true)
+        ix.util.NotifyLocalized("diseasesInfected", pl, target:Name(), disease)
+    end
+})
+
+ix.command.Add("DisinfectPlayer", {
+    description = "Remove Disease for player",
+    adminOnly = true,
+    arguments = {ix.type.player, ix.type.string},
+    argumentNames = {"Target (Player)(SteamID or Name)", "Disease"},
+    OnRun = function(self, pl, target, disease)
+        if not target or not disease then return end
+
+        ix.Diseases:DisinfectPlayer(target, disease)
+        ix.util.NotifyLocalized("diseasesDisinfected", pl, target:Name(), disease)
+    end
+})
+
+ix.command.Add("RemoveAllDiseases", {
+    description = "Remove all diseases for player",
+    adminOnly = true,
+    arguments = {ix.type.player},
+    argumentNames = {"Target (Player)(SteamID or Name)"},
+    OnRun = function(self, pl, target)
+        if not target then return end
+
+        ix.Diseases:RemoveAllDiseases(target)
+        ix.util.NotifyLocalized("diseasesFullyDisinfected", pl, target:Name())
+    end
+})

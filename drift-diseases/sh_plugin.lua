@@ -39,3 +39,4 @@ ix.Diseases = ix.Diseases or {}
 
 ix.util.Include("sv_hooks.lua", "server")
 ix.util.Include("sh_meta.lua", "shared")
+ix.util.Include("sh_lang.lua", "shared")
