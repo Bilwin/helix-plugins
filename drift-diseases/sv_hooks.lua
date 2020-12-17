@@ -17,6 +17,10 @@ for k, v in pairs(ix.Diseases.Loaded) do
     end
 end
 
+local function IsEmptyTable(t)
+	return next(t) == nil
+end
+
 function PLUGIN:PostPlayerLoadout(pl)
     if IsValid(pl) then
         local char = pl:GetCharacter()
@@ -32,6 +36,8 @@ function PLUGIN:PostPlayerLoadout(pl)
             for _, id in pairs(_diseases) do
                 ix.Diseases:InfectPlayer(pl, id, false)
             end
+
+            if IsEmptyTable(ix.Diseases.RandomGetDiseases) then return end
 
             if pl:_TimerExists("bDiseaseRandom::"..pl:SteamID64()) then
                 pl:_RemoveTimer("bDiseaseRandom::"..pl:SteamID64())
