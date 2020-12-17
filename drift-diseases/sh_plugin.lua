@@ -1,14 +1,14 @@
-local plugin = PLUGIN
-plugin.name = "Diseases"
-plugin.author = "Bilwin"
-plugin.description = "Adding diseases"
-plugin.schema = "any"
-plugin.license = [[
+local PLUGIN = PLUGIN
+PLUGIN.name = "Diseases"
+PLUGIN.author = "Bilwin"
+PLUGIN.description = "Adding diseases"
+PLUGIN.schema = "Any"
+PLUGIN.license = [[
     Copyright 2020 Maxim Sukharev (Bilwin)
     This plugin is protected under by MPL-2.0 license
     Full copy of license is here: https://www.mozilla.org/en-US/MPL/2.0/
 ]]
-plugin.readme = [[
+PLUGIN.readme = [[
     Sorry for not making a disease system running on meta tables.
     I think I will do it soon.
 

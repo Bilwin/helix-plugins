@@ -1,4 +1,4 @@
-local plugin = PLUGIN
+local PLUGIN = PLUGIN
 local CHAR = ix.meta.character
 
 function CHAR:IsDiseased()
