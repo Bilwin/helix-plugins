@@ -1,3 +1,4 @@
+
 local PLUGIN = PLUGIN
 PLUGIN.name = "Diseases"
 PLUGIN.author = "Bilwin"

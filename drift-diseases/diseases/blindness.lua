@@ -1,3 +1,4 @@
+
 return {
     name = "Blindness",
     description = "A complete loss of one of your five senses",

@@ -1,3 +1,4 @@
+
 ix.lang.AddTable("english", {
 	diseasesInfected = "Player %s was infected with %s disease",
     diseasesDisinfected = "Player %s has been cured of %s",
