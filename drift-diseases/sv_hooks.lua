@@ -1,4 +1,4 @@
-local plugin = PLUGIN
+local PLUGIN = PLUGIN
 
 ix.Diseases.Registered = ix.Diseases.Registered or {
     ["cough"] = true,
@@ -17,7 +17,7 @@ for k, v in pairs(ix.Diseases.Loaded) do
     end
 end
 
-function plugin:PostPlayerLoadout(pl)
+function PLUGIN:PostPlayerLoadout(pl)
     if IsValid(pl) then
         local char = pl:GetCharacter()
 
@@ -66,6 +66,7 @@ function ix.Diseases:InfectPlayer(pl, disease, bCheck)
             for k, v in SortedPairs(ix.Diseases.Loaded) do
                 if disease == k then
                     if table.HasValue(v.immuneFactions, pl:Team()) then return end
+                    if (hook.Run("CanPlayerGetDisease", pl, disease) or false) then return end
 
                     if bCheck then
                         if char:GetDisease() ~= "" then
@@ -81,6 +82,8 @@ function ix.Diseases:InfectPlayer(pl, disease, bCheck)
                     else
                         v.OnCall(pl)
                     end
+
+                    hook.Run("PlayerInfected", pl, disease)
                 end
             end
         end
@@ -92,6 +95,7 @@ function ix.Diseases:DisinfectPlayer(pl, disease)
     if IsValid(pl) then
         local char = pl:GetCharacter() or false
         if char then
+            if (hook.Run("CanPlayerDisinfect", pl, disease) or false) then return end
             if istable(disease) then
                 for _, k in pairs(disease) do
                     for id, v in SortedPairs(ix.Diseases.Loaded) do
@@ -111,6 +115,8 @@ function ix.Diseases:DisinfectPlayer(pl, disease)
                                 v.OnEnd(pl)
                             end
                         end
+
+                        hook.Run("PlayerDisinfected", pl, disease)
                     end
                 end
 
@@ -135,6 +141,8 @@ function ix.Diseases:DisinfectPlayer(pl, disease)
             end
 
             char:SetData("diseaseInfo", tostring(diseases))
+
+            hook.Run("PlayerDisinfected", pl, disease)
         end
     end
 end
@@ -159,6 +167,7 @@ ix.command.Add("InfectPlayer", {
     argumentNames = {"Target (Player)(SteamID or Name)", "Disease"},
     OnRun = function(self, pl, target, disease)
         if not target or not disease then return end
+        if (hook.Run("CanPlayerGetDisease", target, disease) or false) then return end
 
         ix.Diseases:InfectPlayer(target, disease, true)
         ix.util.NotifyLocalized("diseasesInfected", pl, target:Name(), disease)
@@ -172,6 +181,7 @@ ix.command.Add("DisinfectPlayer", {
     argumentNames = {"Target (Player)(SteamID or Name)", "Disease"},
     OnRun = function(self, pl, target, disease)
         if not target or not disease then return end
+        if (hook.Run("CanPlayerDisinfect", target, disease) or false) then return end
 
         ix.Diseases:DisinfectPlayer(target, disease)
         ix.util.NotifyLocalized("diseasesDisinfected", pl, target:Name(), disease)
