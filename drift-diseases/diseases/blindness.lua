@@ -3,7 +3,7 @@ return {
     name = "Blindness",
     description = "A complete loss of one of your five senses",
     canGetRandomly = true,
-    immuneFactions = {FACTION_MPF, FACTION_OTA},
+    immuneFactions = { FACTION_MPF, FACTION_OTA },
 
     functionsIsClientside = true,
     OnCall = [[

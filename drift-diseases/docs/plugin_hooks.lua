@@ -1,5 +1,4 @@
 
-
 -- @Hook: CanPlayerGetDisease
 -- @Realm: Server
 -- @Description: Can a player get sick with the resulting disease?

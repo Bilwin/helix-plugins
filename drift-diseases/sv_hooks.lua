@@ -53,6 +53,11 @@ function PLUGIN:PostPlayerLoadout(pl)
     end
 end
 
+--[[
+    ix.Diseases base
+    Don't edit it if you don't know what you are doing.
+--]]
+
 function ix.Diseases:SetRandomDisease(pl)
     if IsValid(pl) and pl:IsPlayer() then
         local char = pl:GetCharacter() or false
@@ -165,7 +170,6 @@ end
 --[[
     Chat Commands
 --]]
-
 
 ix.command.Add("InfectPlayer", {
     description = "Set Disease for player",
