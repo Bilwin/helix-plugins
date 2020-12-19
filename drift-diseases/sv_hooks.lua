@@ -34,8 +34,10 @@ function PLUGIN:PostPlayerLoadout(pl)
 
             local _diseases = string.Split(char:GetDisease(), ";")
 
-            for _, id in pairs(_diseases) do
-                ix.Diseases:InfectPlayer(pl, id, false)
+            if _diseases then
+                for _, id in pairs(_diseases) do
+                    ix.Diseases:InfectPlayer(pl, id, false)
+                end
             end
 
             if IsEmptyTable(ix.Diseases.RandomGetDiseases) then return end

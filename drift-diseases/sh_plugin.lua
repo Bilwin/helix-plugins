@@ -30,12 +30,6 @@ PLUGIN.readme = [[
     `blindness`
 ]]
 
-ix.char.RegisterVar("diseaseInfo", { 
-    field = "diseaseInfo",
-    fieldType = ix.type.string,
-    default = ""
-})
-
 local ix = ix or {}
 ix.Diseases = ix.Diseases or {}
 
