@@ -55,7 +55,7 @@ function ix.Hunger:InitThirst( pl )
         local char = pl:GetCharacter() or false
 
         if char then
-            char:SetData( "ixSaturation", pl:IsDonator() and 100 or 60 )
+            char:SetData( "ixSaturation", 60 )
         end
     end
 end
@@ -65,7 +65,7 @@ function ix.Hunger:InitHunger( pl )
         local char = pl:GetCharacter() or false
 
         if char then
-            char:SetData( "ixSatiety", pl:IsDonator() and 100 or 60 )
+            char:SetData( "ixSatiety", 60 )
         end
     end
 end
