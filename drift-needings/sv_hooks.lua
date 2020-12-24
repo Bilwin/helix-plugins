@@ -20,21 +20,33 @@ function PLUGIN:PostPlayerLoadout( pl )
             ix.Hunger:InitHunger( pl )
         end
 
-        pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
-            ix.Hunger:DowngradeSaturation( pl, 2 )
+        local bHunger = hook.Run( "EnablePlayerHunger", pl ) or false
 
-            if char:GetThirst() <= 0 then
-                pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
-            end
-        end )
+        if bHunger == true then
+            pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
+                local bSaturation = hook.Run( "CanPlayerThirst", pl ) or false
 
-        pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 2, 0, function()
-            ix.Hunger:DowngradeSatiety( pl, 3 )
+                if bSaturation == true then
+                    ix.Hunger:DowngradeSaturation( pl, 2 )
 
-            if char:GetHunger() <= 0 then
-                pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
-            end
-        end )
+                    if char:GetThirst() <= 0 then
+                        pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
+                    end
+                end
+            end )
+
+            pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 2, 0, function()
+                local bSatiety = hook.Run("CanPlayerHunger", pl) or false
+
+                if bSatiety == true then
+                    ix.Hunger:DowngradeSatiety( pl, 3 )
+
+                    if char:GetHunger() <= 0 then
+                        pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
+                    end
+                end
+            end )
+        end
     end
 end
 
