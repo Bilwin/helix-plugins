@@ -1,6 +1,7 @@
-ITEM.name = "Газировка Брина"
+
+ITEM.name = "Breen's soda"
 ITEM.model = Model("models/props_junk/popcan01a.mdl")
-ITEM.description = "Упакованная центром дистрибуции пищи для гражданского населения, неизвестно что находится в его составе"
+ITEM.description = "Packaged by a food distribution center for civilians, it is not known what is in it"
 ITEM.width = 1
 ITEM.height = 1
 ITEM.useSound = "litenetwork/food/drink.wav"

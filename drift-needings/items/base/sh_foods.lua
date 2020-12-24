@@ -11,7 +11,7 @@ ITEM.RestoreSatiety = 0
 ITEM.bDropOnDeath = true
 
 ITEM.functions.Apply = {
-	name = "Использовать",
+	name = "Use",
 	tip = "useTip",
 	icon = "icon16/arrow_right.png",
 	OnRun = function( item )

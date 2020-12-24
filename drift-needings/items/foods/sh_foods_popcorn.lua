@@ -1,6 +1,7 @@
-ITEM.name = "Поп-корн"
+
+ITEM.name = "Pop-Corn"
 ITEM.model = Model("models/props_junk/garbage_metalcan001a.mdl")
-ITEM.description = "Специально приготовленный из зерна кукурузы и растительного масла"
+ITEM.description = "Specially prepared from corn grains and vegetable oil"
 ITEM.width = 1
 ITEM.height = 1
 ITEM.useSound = "litenetwork/food/eatfood.wav"
