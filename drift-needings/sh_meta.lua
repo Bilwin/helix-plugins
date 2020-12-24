@@ -1,3 +1,4 @@
+
 local CHAR = ix.meta.character
 
 function CHAR:GetThirst()
