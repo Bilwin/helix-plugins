@@ -15,14 +15,20 @@ ITEM.functions.Apply = {
 	tip = "useTip",
 	icon = "icon16/arrow_right.png",
 	OnRun = function( item )
-		item.player:EmitSound( item.useSound, 70 )
+		local pl = item.player
+
+		if istable( item.useSound ) then
+			ix.util.EmitQueuedSounds( pl, item.useSound, 0, 0.1, 70, 100)
+		else
+			pl:EmitSound( item.useSound, 70 )
+		end
 
 		if item.RestoreSaturation then
-            ix.Hunger:RestoreSaturation( item.player, tonumber( item.RestoreSaturation ) )
+            ix.Hunger:RestoreSaturation( pl, tonumber( item.RestoreSaturation ) )
         end
 
         if item.RestoreSatiety then
-            ix.Hunger:RestoreSatiety( item.player, tonumber( item.RestoreSatiety ) )
+            ix.Hunger:RestoreSatiety( pl, tonumber( item.RestoreSatiety ) )
         end
 
 		return true
