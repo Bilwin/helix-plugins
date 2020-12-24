@@ -1,22 +1,22 @@
 
 function PLUGIN:PostPlayerLoadout( pl )
-    if !IsValid(pl) and !pl:IsPlayer() then return end
+    if !IsValid( pl ) and !pl:IsPlayer() then return end
     local char = pl:GetCharacter() or false
 
     if char then
-        if pl:_TimerExists( "ixSaturation::"..pl:SteamID64() ) then
-            pl:_RemoveTimer( "ixSaturation::"..pl:SteamID64() )
+        if pl:_TimerExists( "ixSaturation::" .. pl:SteamID64() ) then
+            pl:_RemoveTimer( "ixSaturation::" .. pl:SteamID64() )
         end
 
-        if pl:_TimerExists( "ixSatiety::"..pl:SteamID64() ) then
-            pl:_RemoveTimer( "ixSatiety::"..pl:SteamID64() )
+        if pl:_TimerExists( "ixSatiety::" .. pl:SteamID64() ) then
+            pl:_RemoveTimer( "ixSatiety::" .. pl:SteamID64() )
         end
 
-        if !char:GetData("ixSaturation") then
+        if !char:GetData( "ixSaturation" ) then
             ix.Hunger:InitThirst( pl )
         end
 
-        if !char:GetData("ixSatiety") then
+        if !char:GetData( "ixSatiety" ) then
             ix.Hunger:InitHunger( pl )
         end
 
