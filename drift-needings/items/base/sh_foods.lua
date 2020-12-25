@@ -9,6 +9,7 @@ ITEM.useSound = "items/medshot4.wav"
 ITEM.RestoreSaturation = 0
 ITEM.RestoreSatiety = 0
 ITEM.bDropOnDeath = true
+ITEM.returnItems = {}
 
 ITEM.functions.Apply = {
 	name = "Use",
@@ -21,6 +22,14 @@ ITEM.functions.Apply = {
 			ix.util.EmitQueuedSounds( pl, item.useSound, 0, 0.1, 70, 100)
 		else
 			pl:EmitSound( item.useSound, 70 )
+		end
+
+		if istable( item.returnItems ) then
+			for _, v in ipairs( item.returnItems ) do
+				pl:GetCharacter():GetInventory():Add( v )
+			end
+		else
+			pl:GetCharacter():GetInventory():Add( item.returnItems )
 		end
 
 		if item.RestoreSaturation then
