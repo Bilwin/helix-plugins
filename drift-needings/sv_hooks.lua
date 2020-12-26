@@ -20,7 +20,7 @@ function PLUGIN:PostPlayerLoadout( pl )
             ix.Hunger:InitHunger( pl )
         end
 
-        local bHunger = hook.Run( "EnablePlayerHunger", pl ) or false
+        local bHunger = hook.Run( "EnablePlayerHunger", pl ) or true
 
         if bHunger == true then
             pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
