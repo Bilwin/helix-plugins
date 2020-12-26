@@ -20,33 +20,31 @@ function PLUGIN:PostPlayerLoadout( pl )
             ix.Hunger:InitHunger( pl )
         end
 
-        local bHunger = hook.Run( "EnablePlayerHunger", pl ) or true
+        pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
+            local bSaturation = hook.Run( "CanPlayerThirst", pl ) or true
 
-        if bHunger == true then
-            pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
-                local bSaturation = hook.Run( "CanPlayerThirst", pl ) or false
+            if bSaturation == true then
+                ix.Hunger:DowngradeSaturation( pl, 2 )
+                pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 75, 100)
 
-                if bSaturation == true then
-                    ix.Hunger:DowngradeSaturation( pl, 2 )
-
-                    if char:GetThirst() <= 0 then
-                        pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
-                    end
+                if char:GetThirst() <= 0 then
+                    pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
                 end
-            end )
+            end
+        end )
 
-            pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 2, 0, function()
-                local bSatiety = hook.Run("CanPlayerHunger", pl) or false
+        pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 2, 0, function()
+            local bSatiety = hook.Run("CanPlayerHunger", pl) or true
 
-                if bSatiety == true then
-                    ix.Hunger:DowngradeSatiety( pl, 3 )
+            if bSatiety == true then
+                ix.Hunger:DowngradeSatiety( pl, 3 )
+                pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 75, 100)
 
-                    if char:GetHunger() <= 0 then
-                        pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
-                    end
+                if char:GetHunger() <= 0 then
+                    pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
                 end
-            end )
-        end
+            end
+        end )
     end
 end
 
@@ -106,6 +104,17 @@ function ix.Hunger:DowngradeSaturation( pl, amount )
 
         if char then
             char:SetData( "ixSaturation", math.Clamp(char:GetData("ixSaturation", 0) - amount, 0, 100) )
+        end
+    end
+end
+
+function PLUGIN:DoPlayerDeath(pl, _, __)
+    if IsValid( pl ) then
+        local char = pl:GetCharacter() or false
+
+        if char then
+            char:SetData( "ixSatiety", 60 )
+            char:SetData( "ixSaturation", 60 )
         end
     end
 end
