@@ -37,9 +37,9 @@ function PLUGIN:PostPlayerLoadout( pl )
 
             if bSatiety == true then
                 ix.Hunger:DowngradeSatiety( pl, 3 )
-                pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
 
                 if char:GetHunger() <= 0 then
+                    pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
                     pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
                 end
             end
