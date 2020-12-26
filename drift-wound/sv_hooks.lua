@@ -95,16 +95,8 @@ end
 
 function ix.Wounds:RemoveAllWounds(pl)
     if IsValid(pl) and pl:IsPlayer() then
-        local char = pl:GetCharacter()
-
-        if char then
-            char:SetData("bIsBleeding", false)
-            char:SetData("bIsFractured", false)
-        end
-
-        if pl:_TimerExists("bIsBleeding::"..pl:SteamID64()) then
-            pl:_RemoveTimer("bIsBleeding::"..pl:SteamID64())
-        end
+        ix.Wounds:RemoveBleeding( pl )
+        ix.Wounds:RemoveFracture( pl )
     end
 end
 
