@@ -117,3 +117,9 @@ function PLUGIN:DoPlayerDeath(pl, _, __)
         end
     end
 end
+
+util.AddNetworkString( 'EnableHungerBars' )
+function PLUGIN:PlayerLoadedCharacter( pl, _, __ )
+    net.Start( 'EnableHungerBars' )
+    net.Send( pl )
+end
