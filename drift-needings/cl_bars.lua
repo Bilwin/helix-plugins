@@ -1,5 +1,8 @@
 
 local function EnableBars()
+	ix.bar.Remove( "thirst" )
+	ix.bar.Remove( "hunger" )
+
 	ix.bar.Add( function()
 		return math.max( LocalPlayer():GetCharacter():GetThirst() / 100, 0 )
 	end, Color( 68, 106, 205 ), nil, "thirst" )
