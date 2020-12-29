@@ -12,6 +12,8 @@ PLUGIN.license = [[
 local ix = ix or {}
 ix.Hunger = ix.Hunger or {}
 
-ix.util.Include("sv_hooks.lua", "server")
-ix.util.Include("sh_meta.lua", "shared")
-ix.util.Include("cl_bars.lua", "client")
+ix.util.Include( "sv_hooks.lua", "server" )
+ix.util.Include( "sh_meta.lua", "shared" )
+ix.util.Include( "sh_config.lua", "shared" )
+ix.util.Include( "sh_commands.lua", "shared" )
+ix.util.Include( "cl_bars.lua", "client" )

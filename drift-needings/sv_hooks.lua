@@ -2,6 +2,8 @@
 function PLUGIN:PostPlayerLoadout( pl )
     if !IsValid( pl ) and !pl:IsPlayer() then return end
     local char = pl:GetCharacter() or false
+    local _enabled = ix.config.Get( "needsEnabled", true ) or true
+    if not _enabled then return end
 
     if char then
         if pl:_TimerExists( "ixSaturation::" .. pl:SteamID64() ) then
@@ -22,28 +24,39 @@ function PLUGIN:PostPlayerLoadout( pl )
 
         pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
             local bSaturation = hook.Run( "CanPlayerThirst", pl ) or true
+            local _damage = ix.config.Get( "needsDamage", 2 ) or 2
+            local _killing = ix.config.Get( "starvingKilling", true ) or true
 
             if bSaturation == true then
-                ix.Hunger:DowngradeSaturation( pl, 2 )
+                local downgrade = ix.config.Get( "thirstDowngrade", 3 ) or 3
+                ix.Hunger:DowngradeSaturation( pl, tonumber( downgrade ) )
 
-                if char:GetThirst() <= 0 then
-                    pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
+                if char:GetThirst() <= 0 and _killing then
+                    pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
                 end
             end
         end )
 
         pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 2, 0, function()
-            local bSatiety = hook.Run("CanPlayerHunger", pl) or true
+            local bSatiety = hook.Run( "CanPlayerHunger", pl ) or true
+            local _damage = ix.config.Get( "needsDamage", 2 ) or 2
+            local _killing = ix.config.Get( "starvingKilling", true ) or true
 
             if bSatiety == true then
-                ix.Hunger:DowngradeSatiety( pl, 3 )
+                local downgrade = ix.config.Get( "hungerDowngrade", 2 ) or 2
+                ix.Hunger:DowngradeSatiety( pl, tonumber( downgrade ) )
 
                 if char:GetHunger() <= 0 then
                     pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
-                    pl:SetHealth( math.Clamp( pl:Health() - 2, 10, pl:GetMaxHealth() ) )
+
+                    if _killing then
+                        pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
+                    end
                 end
             end
         end )
+
+        hook.Run("PlayerHungerInit", pl)
     end
 end
 
@@ -103,6 +116,26 @@ function ix.Hunger:DowngradeSaturation( pl, amount )
 
         if char then
             char:SetData( "ixSaturation", math.Clamp(char:GetData("ixSaturation", 0) - amount, 0, 100) )
+        end
+    end
+end
+
+function ix.Hunger:SetSatiety( pl, amount )
+    if IsValid( pl ) and pl:IsPlayer() then
+        local char = pl:GetCharacter() or false
+
+        if char then
+            char:SetData( "ixSatiety", math.Clamp(amount, 0, 100) )
+        end
+    end
+end
+
+function ix.Hunger:SetSaturation( pl, amount )
+    if IsValid( pl ) and pl:IsPlayer() then
+        local char = pl:GetCharacter() or false
+
+        if char then
+            char:SetData( "ixSaturation", math.Clamp(amount, 0, 100) )
         end
     end
 end

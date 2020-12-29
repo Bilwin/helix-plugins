@@ -16,3 +16,11 @@ end
 
 function PLUGIN:CanPlayerHunger(player)
 end
+
+-- @Hook: PlayerHungerInit
+-- @Realm: Server
+-- @Description: -
+-- @Arguments: Player player
+-- @Return: nothing
+function PLUGIN:PlayerHungerInit(player)
+end
