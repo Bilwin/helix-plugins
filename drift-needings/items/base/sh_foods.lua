@@ -12,7 +12,7 @@ ITEM.bDropOnDeath = true
 ITEM.returnItems = {}
 
 ITEM.functions.Apply = {
-	name = "Use",
+	name = "Consume",
 	tip = "useTip",
 	icon = "icon16/arrow_right.png",
 	OnRun = function( item )
