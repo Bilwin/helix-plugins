@@ -38,7 +38,7 @@ if ( SERVER ) then
 elseif (CLIENT) then
     net.Receive("ixClearItems::Notify", function()
         if ( LocalPlayer() ) then
-            notification.AddLegacy("Мусор карты был очищен!")
+            notification.AddLegacy("Map trash has been cleared")
         end
     end)
 end
