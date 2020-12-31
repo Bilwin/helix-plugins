@@ -153,6 +153,10 @@ end
 
 util.AddNetworkString( 'EnableHungerBars' )
 function PLUGIN:PlayerLoadedCharacter( pl, _, __ )
+    if pl:GetNetVar("hungerBarsUpdated", false) == true then return end
+
     net.Start( 'EnableHungerBars' )
     net.Send( pl )
+
+    pl:SetNetVar("hungerBarsUpdated", true)
 end
