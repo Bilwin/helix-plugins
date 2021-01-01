@@ -11,7 +11,7 @@ ITEM.RestoreSatiety = 0
 ITEM.bDropOnDeath = true
 ITEM.returnItems = {}
 
-ITEM.functions.Apply = {
+ITEM.functions.Consume = {
 	name = "Consume",
 	tip = "useTip",
 	icon = "icon16/arrow_right.png",
