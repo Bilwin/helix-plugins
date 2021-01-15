@@ -6,5 +6,5 @@ PLUGIN.schema = "Any"
 
 function PLUGIN:OnPlayerHitGround( pl )
     local vel = pl:GetVelocity()
-    pl:SetVelocity( Vector( - ( vel.x * 0.75 ), - ( vel.y * 0.75 ), 0) )
+    pl:SetVelocity( Vector( - ( vel.x * 0.45 ), - ( vel.y * 0.45 ), 0) )
 end
