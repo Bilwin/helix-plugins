@@ -27,11 +27,12 @@ function PLUGIN:PostPlayerLoadout( pl )
             local _damage = ix.config.Get( "needsDamage", 2 ) or 2
             local _killing = ix.config.Get( "starvingKilling", true ) or true
 
-            if bSaturation == true then
+            if bSaturation then
                 local downgrade = ix.config.Get( "thirstDowngrade", 3 ) or 3
                 ix.Hunger:DowngradeSaturation( pl, tonumber( downgrade ) )
 
                 if char:GetThirst() <= 0 and _killing then
+                    ix.util.Notify("Wouldn't hurt to drink something", pl)
                     pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
                 end
             end
@@ -42,7 +43,7 @@ function PLUGIN:PostPlayerLoadout( pl )
             local _damage = ix.config.Get( "needsDamage", 2 ) or 2
             local _killing = ix.config.Get( "starvingKilling", true ) or true
 
-            if bSatiety == true then
+            if bSatiety then
                 local downgrade = ix.config.Get( "hungerDowngrade", 2 ) or 2
                 ix.Hunger:DowngradeSatiety( pl, tonumber( downgrade ) )
 
@@ -50,6 +51,7 @@ function PLUGIN:PostPlayerLoadout( pl )
                     pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
 
                     if _killing then
+                        ix.util.Notify("Wouldn't hurt to eat something", pl)
                         pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
                     end
                 end
@@ -140,6 +142,14 @@ function ix.Hunger:SetSaturation( pl, amount )
     end
 end
 
+function ix.Hunger:SetCharSatiety( char, amount )
+    char:SetData( "ixSatiety", math.Clamp(amount, 0, 100) )
+end
+
+function ix.Hunger:SetCharSaturation( char, amount )
+    char:SetData( "ixSaturation", math.Clamp(amount, 0, 100) )
+end
+
 function PLUGIN:DoPlayerDeath(pl, _, __)
     if IsValid( pl ) then
         local char = pl:GetCharacter() or false
@@ -153,10 +163,18 @@ end
 
 util.AddNetworkString( 'EnableHungerBars' )
 function PLUGIN:PlayerLoadedCharacter( pl, _, __ )
-    if pl:GetNetVar("hungerBarsUpdated", false) == true then return end
+    if pl.BarsUpdated == nil then
+        net.Start( 'EnableHungerBars' )
+        net.Send( pl )
 
-    net.Start( 'EnableHungerBars' )
-    net.Send( pl )
+        pl.BarsUpdated = true
+    end
+end
 
-    pl:SetNetVar("hungerBarsUpdated", true)
+function PLUGIN:CanPlayerThirst(pl)
+    return pl:Team() ~= FACTION_OTA
+end
+
+function PLUGIN:CanPlayerHunger(pl)
+    return pl:Team() ~= FACTION_OTA
 end

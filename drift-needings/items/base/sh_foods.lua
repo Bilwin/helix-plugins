@@ -11,6 +11,25 @@ ITEM.RestoreSatiety = 0
 ITEM.bDropOnDeath = true
 ITEM.returnItems = {}
 
+function ITEM:OnCanConsume(pl)
+	return true
+end
+
+function ITEM:OnInstanced(invID, x, y, item)
+	if item then
+		item:SetData("remaining", item.RemainingDefault)
+	end
+end
+
+if CLIENT then
+	function ITEM:PopulateTooltip(tooltip)
+		local panel = tooltip:AddRowAfter( "name", "remaining" )
+		panel:SetBackgroundColor( Color(50, 50, 50) )
+		panel:SetText( L("remaining") .. ": " .. self:GetData("remaining", 4) )
+		panel:SizeToContents()
+	end
+end
+
 ITEM.functions.Consume = {
 	name = "Consume",
 	tip = "useTip",
@@ -33,13 +52,22 @@ ITEM.functions.Consume = {
 		end
 
 		if item.RestoreSaturation then
-            ix.Hunger:RestoreSaturation( pl, tonumber( item.RestoreSaturation ) )
+            ix.Hunger:RestoreSaturation( pl, math.Round( tonumber( item.RestoreSaturation ) / item.RemainingDefault ) )
         end
 
         if item.RestoreSatiety then
-            ix.Hunger:RestoreSatiety( pl, tonumber( item.RestoreSatiety ) )
+            ix.Hunger:RestoreSatiety( pl, math.Round( tonumber( item.RestoreSatiety ) / item.RemainingDefault ) )
         end
 
-		return true
+		item:SetData("remaining", item:GetData("remaining", 4) - 1)
+
+		if item:GetData("remaining", 4) <= 0 then
+			return true
+		end
+
+		return false
 	end,
+	OnCanRun = function(item)
+		return item:OnCanConsume(item.player)
+	end
 }

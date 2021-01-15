@@ -1,36 +1,34 @@
 
 do
-    local COMMAND = {}
-    COMMAND.description = "Sets the satiety of a player"
-    COMMAND.arguments = {ix.type.player, ix.type.number}
-    COMMAND.argumentNames = {"Player", "Amount"}
-    COMMAND.adminOnly = true
+    ix.command.Add("CharSetSatiety", {
+        description = "Sets the satiety of a player.",
+        adminOnly = true,
+        arguments = {
+            ix.type.character,
+            bit.bor(ix.type.number, ix.type.optional)
+        },
+        OnRun = function(self, pl, target, amount)
+            local bStatus = ix.config.Get( "needsEnabled", true ) or true
 
-    function COMMAND:OnRun(self, pl, target, amount)
-        local bStatus = ix.config.Get( "needsEnabled", true ) or true
-
-        if bStatus then
-            ix.Hunger:SetSatiety( target, tonumber(amount) )
+            if bStatus then
+                ix.Hunger:SetCharSatiety( target, tonumber(amount) )
+            end
         end
-    end
+    })
+    
+    ix.command.Add("CharSetSaturation", {
+        description = "Sets the saturation of a player.",
+        adminOnly = true,
+        arguments = {
+            ix.type.character,
+            bit.bor(ix.type.number, ix.type.optional)
+        },
+        OnRun = function(self, pl, target, amount)
+            local bStatus = ix.config.Get( "needsEnabled", true ) or true
 
-    ix.command.Add("CharSetSatiety", COMMAND)
-end
-
-do
-    local COMMAND = {}
-    COMMAND.description = "Sets the saturation of a player"
-    COMMAND.arguments = {ix.type.player, ix.type.number}
-    COMMAND.argumentNames = {"Player", "Amount"}
-    COMMAND.adminOnly = true
-
-    function COMMAND:OnRun(self, pl, target, amount)
-        local bStatus = ix.config.Get( "needsEnabled", true ) or true
-
-        if bStatus then
-            ix.Hunger:SetSaturation( target, tonumber(amount) )
+            if bStatus then
+                ix.Hunger:SetCharSaturation( target, tonumber(amount) )
+            end
         end
-    end
-
-    ix.command.Add("CharSetSaturation", COMMAND)
+    })
 end
