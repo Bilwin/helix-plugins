@@ -170,11 +170,3 @@ function PLUGIN:PlayerLoadedCharacter( pl, _, __ )
         pl.BarsUpdated = true
     end
 end
-
-function PLUGIN:CanPlayerThirst(pl)
-    return pl:Team() ~= FACTION_OTA
-end
-
-function PLUGIN:CanPlayerHunger(pl)
-    return pl:Team() ~= FACTION_OTA
-end
