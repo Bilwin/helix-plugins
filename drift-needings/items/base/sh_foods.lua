@@ -11,10 +11,6 @@ ITEM.RestoreSatiety = 0
 ITEM.bDropOnDeath = true
 ITEM.returnItems = {}
 
-function ITEM:OnCanConsume(pl)
-	return true
-end
-
 function ITEM:OnInstanced(invID, x, y, item)
 	if item then
 		item:SetData("remaining", item.RemainingDefault)
@@ -66,8 +62,5 @@ ITEM.functions.Consume = {
 		end
 
 		return false
-	end,
-	OnCanRun = function(item)
-		return item:OnCanConsume(item.player)
 	end
 }
