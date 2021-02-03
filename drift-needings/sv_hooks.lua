@@ -22,42 +22,45 @@ function PLUGIN:PostPlayerLoadout( pl )
             ix.Hunger:InitHunger( pl )
         end
 
-        pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 2, 0, function()
-            local bSaturation = hook.Run( "CanPlayerThirst", pl ) or true
+        local notBEnaled = hook.Run( "CanPlayerHunger", pl ) == false
+
+        if notBEnaled then
+            ix.Hunger:AbortThirst(pl)
+            ix.Hunger:AbortHunger(pl)
+            goto init
+        end
+
+        pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 8, 0, function()
             local _damage = ix.config.Get( "needsDamage", 2 ) or 2
             local _killing = ix.config.Get( "starvingKilling", true ) or true
 
-            if bSaturation then
-                local downgrade = ix.config.Get( "thirstDowngrade", 3 ) or 3
-                ix.Hunger:DowngradeSaturation( pl, tonumber( downgrade ) )
+            local downgrade = ix.config.Get( "thirstDowngrade", 3 ) or 3
+            ix.Hunger:DowngradeSaturation( pl, tonumber( downgrade ) )
 
-                if char:GetThirst() <= 0 and _killing then
-                    ix.util.Notify("Wouldn't hurt to drink something", pl)
+            if char:GetThirst() <= 0 and _killing then
+                ix.util.Notify("Wouldn't hurt to drink something", pl)
+                pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
+            end
+        end )
+
+        pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 10, 0, function()
+            local _damage = ix.config.Get( "needsDamage", 2 ) or 2
+            local _killing = ix.config.Get( "starvingKilling", true ) or true
+
+            local downgrade = ix.config.Get( "hungerDowngrade", 2 ) or 2
+            ix.Hunger:DowngradeSatiety( pl, tonumber( downgrade ) )
+
+            if char:GetHunger() <= 0 then
+                pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
+
+                if _killing then
+                    ix.util.Notify("Wouldn't hurt to eat something", pl)
                     pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
                 end
             end
         end )
 
-        pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 2, 0, function()
-            local bSatiety = hook.Run( "CanPlayerHunger", pl ) or true
-            local _damage = ix.config.Get( "needsDamage", 2 ) or 2
-            local _killing = ix.config.Get( "starvingKilling", true ) or true
-
-            if bSatiety then
-                local downgrade = ix.config.Get( "hungerDowngrade", 2 ) or 2
-                ix.Hunger:DowngradeSatiety( pl, tonumber( downgrade ) )
-
-                if char:GetHunger() <= 0 then
-                    pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
-
-                    if _killing then
-                        ix.util.Notify("Wouldn't hurt to eat something", pl)
-                        pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
-                    end
-                end
-            end
-        end )
-
+        ::init::
         hook.Run("PlayerHungerInit", pl)
     end
 end
@@ -78,6 +81,26 @@ function ix.Hunger:InitHunger( pl )
 
         if char then
             char:SetData( "ixSatiety", 60 )
+        end
+    end
+end
+
+function ix.Hunger:AbortThirst(pl)
+    if IsValid( pl ) and pl:IsPlayer() then
+        local char = pl:GetCharacter() or false
+
+        if char then
+            char:SetData( "ixSaturation", 0 )
+        end
+    end
+end
+
+function ix.Hunger:AbortHunger(pl)
+    if IsValid( pl ) and pl:IsPlayer() then
+        local char = pl:GetCharacter() or false
+
+        if char then
+            char:SetData( "ixSatiety", 0 )
         end
     end
 end
