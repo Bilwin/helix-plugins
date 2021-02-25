@@ -1,7 +1,6 @@
 
 PLUGIN.name = "Anti-Bhop"
 PLUGIN.author = "Bilwin"
-PLUGIN.description = "..."
 PLUGIN.schema = "Any"
 
 function PLUGIN:OnPlayerHitGround( pl )
