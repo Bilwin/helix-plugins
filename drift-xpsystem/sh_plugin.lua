@@ -1,14 +1,14 @@
-local plugin = PLUGIN
-plugin.name = "XP System"
-plugin.author = "Bilwin"
-plugin.description = "..."
-plugin.schema = "any"
-plugin.license = [[
+
+PLUGIN.name = "XP System"
+PLUGIN.author = "Bilwin"
+PLUGIN.description = "..."
+PLUGIN.schema = "any"
+PLUGIN.license = [[
     Copyright 2021 Maxim Sukharev (Bilwin) All Rights Reserved
     This plugin is protected under by MPL-2.0 license
     Full copy of license is here: https://www.mozilla.org/en-US/MPL/2.0/
 ]]
-plugin.readme = [[
+PLUGIN.readme = [[
     This plugin adds the XP system to the server, if it is enabled.
     If used correctly, you can make it so that you need to have some XP to select a class.
     The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
