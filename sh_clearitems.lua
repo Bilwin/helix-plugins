@@ -1,3 +1,4 @@
+
 PLUGIN.name = "Clear Items"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "Clean your map from garbage"
@@ -19,7 +20,7 @@ if ( SERVER ) then
 
     local function clear()
         timer.Create("ixCleanMap", 60 * 10, 0, function()
-            for _, v in pairs( ents.FindByClass( "*" ) ) do
+            for _, v in ipairs( ents.FindByClass( "*" ) ) do
                 if ix.ClearItems[ v:GetClass() ] then
                     v:Remove()
                 end
