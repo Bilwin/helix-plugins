@@ -102,7 +102,7 @@ if (SERVER) then
                         butcheringTime = math.Round( physObj:GetMass() )
                     end
 
-                    pl:SetAction("Разделываем...", butcheringTime)
+                    pl:SetAction("Butchering...", butcheringTime)
                     pl:DoStaredAction(target, function()
                         if ( IsValid(pl) ) then
                             pl:LeaveSequence()
