@@ -95,54 +95,56 @@ if (SERVER) then
             if ( key == IN_USE ) then
                 local HitPos = pl:GetEyeTraceNoCursor()
                 local target = HitPos.Entity
-                local allowedWeapons = istable(ix.CorpseButchering[target:GetModel()].butcheringWeapons) and ix.CorpseButchering[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
-                local canButchering = hook.Run('CanButchering', pl, target)
-                if ( target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] and table.HasValue(allowedWeapons, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() and canButchering ) then
-                    local butcheringAnimation = isstring(ix.CorpseButchering[target:GetModel()].animation) and ix.CorpseButchering[target:GetModel()].animation or "Roofidle1"
-                    pl:ForceSequence(butcheringAnimation, nil, 0)
-                    target:SetNetVar('cutting', true)
-                    target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[1]) or "ambient/machines/slicer1.wav" )
+                if target and IsValid(target) and target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] then
+                    local allowedWeapons = istable(ix.CorpseButchering[target:GetModel()].butcheringWeapons) and ix.CorpseButchering[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
+                    local canButchering = hook.Run('CanButchering', pl, target)
+                    if ( table.HasValue(allowedWeapons, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() and canButchering ) then
+                        local butcheringAnimation = isstring(ix.CorpseButchering[target:GetModel()].animation) and ix.CorpseButchering[target:GetModel()].animation or "Roofidle1"
+                        pl:ForceSequence(butcheringAnimation, nil, 0)
+                        target:SetNetVar('cutting', true)
+                        target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[1]) or "ambient/machines/slicer1.wav" )
 
-                    local physObj, butcheringTime = target:GetPhysicsObject(), isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) and ix.CorpseButchering[target:GetModel()].butcheringTime or 2
+                        local physObj, butcheringTime = target:GetPhysicsObject(), isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) and ix.CorpseButchering[target:GetModel()].butcheringTime or 2
 
-                    if ( IsValid(physObj) and !isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) ) then
-                        butcheringTime = math.Round( physObj:GetMass() )
-                    end
+                        if ( IsValid(physObj) and !isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) ) then
+                            butcheringTime = math.Round( physObj:GetMass() )
+                        end
 
-                    pl:SetAction("Butchering...", butcheringTime)
-                    pl:DoStaredAction(target, function()
-                        if ( IsValid(pl) ) then
-                            pl:LeaveSequence()
+                        pl:SetAction("Разделываем...", butcheringTime)
+                        pl:DoStaredAction(target, function()
+                            if ( IsValid(pl) ) then
+                                pl:LeaveSequence()
 
-                            if IsValid(target) then
-                                target:SetNetVar('cutting', nil)
-                                target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[2] or "ambient/machines/slicer4.wav") )
+                                if IsValid(target) then
+                                    target:SetNetVar('cutting', nil)
+                                    target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[2] or "ambient/machines/slicer4.wav") )
 
-                                local effect = EffectData()
-                                    effect:SetStart(target:LocalToWorld(target:OBBCenter()))
-                                    effect:SetOrigin(target:LocalToWorld(target:OBBCenter()))
-                                    effect:SetScale(3)
-                                util.Effect(ix.CorpseButchering[target:GetModel()].impactEffect or "BloodImpact", effect)
+                                    local effect = EffectData()
+                                        effect:SetStart(target:LocalToWorld(target:OBBCenter()))
+                                        effect:SetOrigin(target:LocalToWorld(target:OBBCenter()))
+                                        effect:SetScale(3)
+                                    util.Effect(ix.CorpseButchering[target:GetModel()].impactEffect or "BloodImpact", effect)
 
-                                local butcheringItems = istable(ix.CorpseButchering[target:GetModel()].items) and ix.CorpseButchering[target:GetModel()].items or {}
-                                if !table.IsEmpty(butcheringItems) then
-                                    for _, item in ipairs( butcheringItems ) do
-                                        pl:GetCharacter():GetInventory():Add(item)
+                                    local butcheringItems = istable(ix.CorpseButchering[target:GetModel()].items) and ix.CorpseButchering[target:GetModel()].items or {}
+                                    if !table.IsEmpty(butcheringItems) then
+                                        for _, item in ipairs( butcheringItems ) do
+                                            pl:GetCharacter():GetInventory():Add(item)
+                                        end
                                     end
-                                end
 
-                                ix.log.Add(pl, "playerButchered", target)
-                                hook.Run('OnButchered', pl, target)
-                                target:Remove()
+                                    ix.log.Add(pl, "playerButchered", target)
+                                    hook.Run('OnButchered', pl, target)
+                                    target:Remove()
+                                end
                             end
-                        end
-                    end, butcheringTime, function()
-                        if ( IsValid(pl) ) then
-                            pl:SetAction()
-                            pl:LeaveSequence()
-                            target:SetNetVar('cutting', false)
-                        end
-                    end)
+                        end, butcheringTime, function()
+                            if ( IsValid(pl) ) then
+                                pl:SetAction()
+                                pl:LeaveSequence()
+                                target:SetNetVar('cutting', false)
+                            end
+                        end)
+                    end
                 end
             end
         end
