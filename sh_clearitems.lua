@@ -14,10 +14,6 @@ if ( SERVER ) then
         [ "ix_shipment" ]   = true
     }
 
-    local function IsEmptyTable( t )
-        return next( t ) == nil or false
-    end
-
     local function clear()
         timer.Create("ixCleanMap", 60 * 10, 0, function()
             for _, v in ipairs( ents.FindByClass( "*" ) ) do
@@ -26,7 +22,7 @@ if ( SERVER ) then
                 end
             end
 
-            if !IsEmptyTable(ix.ClearItems) then
+            if !table.IsEmpty(ix.ClearItems) then
                 net.Start("ixClearItems::Notify")
                 net.Broadcast()
             end
