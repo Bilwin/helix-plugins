@@ -50,7 +50,7 @@ if (SERVER) then
 
     util.AddNetworkString('ixClearClientRagdolls')
 	function PLUGIN:OnNPCKilled(npc, attacker, inflictor)
-        if IsValid(npc) then
+        if IsValid(npc) and ix.CorpseButchering[npc:GetModel()] then
             local ragdoll = ents.Create("prop_ragdoll")
             ragdoll:SetPos( npc:GetPos() )
             ragdoll:SetAngles( npc:EyeAngles() )
@@ -96,7 +96,8 @@ if (SERVER) then
                 local HitPos = pl:GetEyeTraceNoCursor()
                 local target = HitPos.Entity
                 local allowedWeapons = istable(ix.CorpseButchering[target:GetModel()].butcheringWeapons) and ix.CorpseButchering[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
-                if ( target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] and table.HasValue(allowedWeapons, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() ) then
+                local canButchering = hook.Run('CanButchering', pl, target)
+                if ( target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] and table.HasValue(allowedWeapons, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() and canButchering ) then
                     local butcheringAnimation = isstring(ix.CorpseButchering[target:GetModel()].animation) and ix.CorpseButchering[target:GetModel()].animation or "Roofidle1"
                     pl:ForceSequence(butcheringAnimation, nil, 0)
                     target:SetNetVar('cutting', true)
@@ -131,6 +132,7 @@ if (SERVER) then
                                 end
 
                                 ix.log.Add(pl, "playerButchered", target)
+                                hook.Run('OnButchered', pl, target)
                                 target:Remove()
                             end
                         end
@@ -144,6 +146,10 @@ if (SERVER) then
                 end
             end
         end
+    end
+
+    function PLUGIN:CanButchering(pl, target)
+        return true
     end
 end
 
