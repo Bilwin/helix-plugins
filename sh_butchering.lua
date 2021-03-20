@@ -91,14 +91,16 @@ if (SERVER) then
             if ( key == IN_USE ) then
                 local HitPos = pl:GetEyeTraceNoCursor()
                 local target = HitPos.Entity
-                if ( target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] and table.HasValue(ix.CorpseButchering[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() ) then
-                    pl:ForceSequence(ix.CorpseButchering[target:GetModel()].animation or "Roofidle1", nil, 0)
+                local allowedWeapons = istable(ix.CorpseButchering[target:GetModel()].butcheringWeapons) and ix.CorpseButchering[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
+                if ( target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] and table.HasValue(allowedWeapons, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() ) then
+                    local butcheringAnimation = isstring(ix.CorpseButchering[target:GetModel()].animation) and ix.CorpseButchering[target:GetModel()].animation or "Roofidle1"
+                    pl:ForceSequence(butcheringAnimation, nil, 0)
                     target:SetNetVar('cutting', true)
                     target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[1]) or "ambient/machines/slicer1.wav" )
 
-                    local physObj, butcheringTime = target:GetPhysicsObject(), ix.CorpseButchering[target:GetModel()].butcheringTime or 2
+                    local physObj, butcheringTime = target:GetPhysicsObject(), isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) and ix.CorpseButchering[target:GetModel()].butcheringTime or 2
 
-                    if ( IsValid(physObj) and !ix.CorpseButchering[target:GetModel()].butcheringTime ) then
+                    if ( IsValid(physObj) and !isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) ) then
                         butcheringTime = math.Round( physObj:GetMass() )
                     end
 
@@ -117,8 +119,11 @@ if (SERVER) then
                                     effect:SetScale(3)
                                 util.Effect(ix.CorpseButchering[target:GetModel()].impactEffect or "BloodImpact", effect)
 
-                                for _, item in ipairs( ix.CorpseButchering[target:GetModel()].items ) do
-                                    pl:GetCharacter():GetInventory():Add(item)
+                                local butcheringItems = istable(ix.CorpseButchering[target:GetModel()].items) and ix.CorpseButchering[target:GetModel()].items or {}
+                                if !table.IsEmpty(butcheringItems) then
+                                    for _, item in ipairs( butcheringItems ) do
+                                        pl:GetCharacter():GetInventory():Add(item)
+                                    end
                                 end
 
                                 target:Remove()
