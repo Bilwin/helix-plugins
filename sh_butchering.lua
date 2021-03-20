@@ -44,6 +44,10 @@ ix.CorpseButchering = {
 }
 
 if (SERVER) then
+    ix.log.AddType("playerButchered", function(pl, corpse)
+        return string.format("%s was butchered %s.", pl:Name(), corpse:GetModel())
+    end)
+
     util.AddNetworkString('ixClearClientRagdolls')
 	function PLUGIN:OnNPCKilled(npc, attacker, inflictor)
         if IsValid(npc) then
@@ -126,6 +130,7 @@ if (SERVER) then
                                     end
                                 end
 
+                                ix.log.Add(pl, "playerButchered", target)
                                 target:Remove()
                             end
                         end
