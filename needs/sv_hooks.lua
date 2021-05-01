@@ -1,195 +1,82 @@
 
-function PLUGIN:PostPlayerLoadout( pl )
-    if !IsValid( pl ) and !pl:IsPlayer() then return end
-    local char = pl:GetCharacter() or false
-    local _enabled = ix.config.Get( "needsEnabled", true ) or true
-    if not _enabled then return end
+local PLUGIN = PLUGIN
 
-    if char then
-        if pl:_TimerExists( "ixSaturation::" .. pl:SteamID64() ) then
-            pl:_RemoveTimer( "ixSaturation::" .. pl:SteamID64() )
+function PLUGIN:PlayerLoadedCharacter(client, character, _)
+    if !IsValid(client) and !client:IsPlayer() and !character then return end
+    if (character:GetSaturation()) then
+        local clampedSaturation = math.Round(math.Clamp(character:GetSaturation(), 0, 100))
+        client:SetLocalVar("saturation", clampedSaturation)
+    end
+    if (character:GetSatiety()) then
+        local clampedSatiety = math.Round(math.Clamp(character:GetSatiety(), 0, 100))
+        client:SetLocalVar("satiety", clampedSatiety)
+    end
+
+    local uniqueID = client:AccountID()
+    if timer.Exists("ixPrimaryNeeds." .. uniqueID) then timer.Remove("ixPrimaryNeeds." .. uniqueID) end
+    if ( hook.Run("ShouldNeedsForPlayer", client, character) == false ) then return end
+    self:CreateNeedsTimer(client, character)
+end
+
+PLUGIN.hungerSounds = {
+    [1] = 'npc/barnacle/barnacle_digesting1.wav',
+    [2] = 'npc/barnacle/barnacle_digesting2.wav'
+}
+
+function PLUGIN:CreateNeedsTimer(client, character)
+    local uniqueID = client:AccountID()
+    local needsDelay = ix.config.Get("primaryNeedsDelay", 120)
+    timer.Create("ixPrimaryNeeds." .. uniqueID, needsDelay, 0, function()
+        if !IsValid(client) then return end
+        if !character then return end
+        if ( hook.Run("EnableNeedsForCharacter", client, character) == false ) then return end
+
+        local filledSlots = math.Round( character:GetInventory():GetFilledSlotCount() / 2 )
+        local velocity = client:GetVelocity():LengthSqr()
+        local saturationConsume = ix.config.Get("saturationConsume", 3) + filledSlots
+        local satietyConsume = ix.config.Get("satietyConsume", 2) + filledSlots
+        if (velocity > 0) then
+            saturationConsume = math.Round(saturationConsume * 1.5)
+            satietyConsume = math.Round(satietyConsume * 1.5)
         end
 
-        if pl:_TimerExists( "ixSatiety::" .. pl:SteamID64() ) then
-            pl:_RemoveTimer( "ixSatiety::" .. pl:SteamID64() )
+        if (character:GetSatiety() <= 10) then
+            client:EmitSound( self.hungerSounds[math.random(#self.hungerSounds)] )
         end
 
-        if !char:GetData( "ixSaturation" ) then
-            ix.Hunger:InitThirst( pl )
+        if (character:GetSatiety() <= 0 and character:GetSaturation() <= 0) then
+            client:SetHealth( client:Health() - 2 )
         end
 
-        if !char:GetData( "ixSatiety" ) then
-            ix.Hunger:InitHunger( pl )
-        end
+        character:DowngradeSaturation(saturationConsume)
+        character:DowngradeSatiety(satietyConsume)
+    end)
+end
 
-        local notBEnaled = hook.Run( "CanPlayerHunger", pl ) == false
+function PLUGIN:EnableNeedsForCharacter(client, character)
+    local bStatus = false
+    local factionTable = ix.faction.indices[character:GetFaction()] or {}
 
-        if notBEnaled then
-            ix.Hunger:AbortThirst(pl)
-            ix.Hunger:AbortHunger(pl)
-            goto init
-        end
+    if (factionTable and factionTable.includeNeeds) then
+        bStatus = true
+    end
 
-        pl:_SetTimer( "ixSaturation::" .. pl:SteamID64(), 60 * 8, 0, function()
-            local _damage = ix.config.Get( "needsDamage", 2 ) or 2
-            local _killing = ix.config.Get( "starvingKilling", true ) or true
+    return bStatus
+end
 
-            local downgrade = ix.config.Get( "thirstDowngrade", 3 ) or 3
-            ix.Hunger:DowngradeSaturation( pl, tonumber( downgrade ) )
-
-            if char:GetThirst() <= 0 and _killing then
-                ix.util.Notify("Wouldn't hurt to drink something", pl)
-                pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
-            end
-        end )
-
-        pl:_SetTimer( "ixSatiety::" .. pl:SteamID64(), 60 * 10, 0, function()
-            local _damage = ix.config.Get( "needsDamage", 2 ) or 2
-            local _killing = ix.config.Get( "starvingKilling", true ) or true
-
-            local downgrade = ix.config.Get( "hungerDowngrade", 2 ) or 2
-            ix.Hunger:DowngradeSatiety( pl, tonumber( downgrade ) )
-
-            if char:GetHunger() <= 0 then
-                pl:EmitSound("npc/barnacle/barnacle_digesting2.wav", 45, 100)
-
-                if _killing then
-                    ix.util.Notify("Wouldn't hurt to eat something", pl)
-                    pl:SetHealth( math.Clamp( pl:Health() - tonumber( _damage ), 10, pl:GetMaxHealth() ) )
-                end
-            end
-        end )
-
-        ::init::
-        hook.Run("PlayerHungerInit", pl)
+function PLUGIN:DoPlayerDeath(client, _, __)
+    local char = client:GetCharacter()
+    if ( IsValid(client) and char ) then
+        local defaultSaturation = ix.char.vars["saturation"].default or 60
+        local defaultSatiety = ix.char.vars["satiety"].default or 60
+        char:SetSaturation(defaultSaturation)
+        char:SetSatiety(defaultSatiety)
     end
 end
 
-function ix.Hunger:InitThirst( pl )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSaturation", 60 )
-        end
-    end
-end
-
-function ix.Hunger:InitHunger( pl )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSatiety", 60 )
-        end
-    end
-end
-
-function ix.Hunger:AbortThirst(pl)
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSaturation", 0 )
-        end
-    end
-end
-
-function ix.Hunger:AbortHunger(pl)
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSatiety", 0 )
-        end
-    end
-end
-
-function ix.Hunger:RestoreSatiety( pl, amount )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSatiety", math.Clamp(char:GetData("ixSatiety", 0) + amount, 0, 100) )
-        end
-    end
-end
-
-function ix.Hunger:RestoreSaturation( pl, amount )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSaturation", math.Clamp(char:GetData("ixSaturation", 0) + amount, 0, 100) )
-        end
-    end
-end
-
-function ix.Hunger:DowngradeSatiety( pl, amount )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSatiety", math.Clamp(char:GetData("ixSatiety", 0) - amount, 0, 100) )
-        end
-    end
-end
-
-function ix.Hunger:DowngradeSaturation( pl, amount )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSaturation", math.Clamp(char:GetData("ixSaturation", 0) - amount, 0, 100) )
-        end
-    end
-end
-
-function ix.Hunger:SetSatiety( pl, amount )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSatiety", math.Clamp(amount, 0, 100) )
-        end
-    end
-end
-
-function ix.Hunger:SetSaturation( pl, amount )
-    if IsValid( pl ) and pl:IsPlayer() then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSaturation", math.Clamp(amount, 0, 100) )
-        end
-    end
-end
-
-function ix.Hunger:SetCharSatiety( char, amount )
-    char:SetData( "ixSatiety", math.Clamp(amount, 0, 100) )
-end
-
-function ix.Hunger:SetCharSaturation( char, amount )
-    char:SetData( "ixSaturation", math.Clamp(amount, 0, 100) )
-end
-
-function PLUGIN:DoPlayerDeath(pl, _, __)
-    if IsValid( pl ) then
-        local char = pl:GetCharacter() or false
-
-        if char then
-            char:SetData( "ixSatiety", 60 )
-            char:SetData( "ixSaturation", 60 )
-        end
-    end
-end
-
-util.AddNetworkString( 'EnableHungerBars' )
-function PLUGIN:PlayerLoadedCharacter( pl, _, __ )
-    if pl.BarsUpdated == nil then
-        net.Start( 'EnableHungerBars' )
-        net.Send( pl )
-
-        pl.BarsUpdated = true
+function PLUGIN:PlayerDisconnected(client)
+    local uniqueID = client:AccountID()
+    if timer.Exists("ixPrimaryNeeds." .. uniqueID) then
+        timer.Remove("ixPrimaryNeeds." .. uniqueID)
     end
 end
