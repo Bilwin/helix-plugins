@@ -1,3 +1,5 @@
+
+local PLUGIN = PLUGIN
 ITEM.name = "Bandage"
 ITEM.model = Model("models/props_wasteland/prison_toiletchunk01l.mdl")
 ITEM.description = "Small roll of gauze cloth."
@@ -9,14 +11,8 @@ ITEM.functions.Apply = {
 	icon = "icon16/heart.png",
 	sound = "items/medshot4.wav",
 	OnRun = function(itemTable)
-		local pl = itemTable.player
-		local char = pl:GetCharacter()
-
-		if math.random(5) > 2 then
-			ix.Wounds:RemoveBleeding(pl)
-		end
-
-		pl:SetHealth(math.min(pl:Health() + 5, 100))
+		local client = itemTable.player
+		PLUGIN:SetBleeding(client, false)
 	end
 }
 
@@ -32,15 +28,9 @@ ITEM.functions.ApplyTarget = {
 			data.filter = pl
 		local target = util.TraceLine(data).Entity
 
-		if IsValid(target) and target:IsPlayer() then
-			if target:GetCharacter() then
-				if math.random(5) > 2 then
-					ix.Wounds:RemoveBleeding(target)
-				end
-
-				target:SetHealth(math.min(target:Health() + 50, 100))
-				return true
-			end
+		if target:IsValid() and target:IsPlayer() then
+			PLUGIN:SetBleeding(target, false)
+			return true
 		end
 
 		return false
