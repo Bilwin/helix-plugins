@@ -1,41 +1,41 @@
 
-PLUGIN.name = "Clear Items"
+local PLUGIN = PLUGIN
+PLUGIN.name = "Garbage Cleaner"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "Clean your map from garbage"
 PLUGIN.schema = "Any"
+PLUGIN.clearItems = {
+    ["ix_item"] = true,
+    ["ix_money"] = true,
+    ["ix_shipment"] = true
+}
 
-if ( SERVER ) then
-    util.AddNetworkString("ixClearItems::Notify")
+ix.config.Add("garbageCleanerDelay", 600, "How long does it take to wait between clearing the map", function(_, new)
+    if (SERVER) then
+        PLUGIN:CreateTimer(new)
+    end
+end, {
+	data = {min = 0, max = 15000},
+	category = PLUGIN.name
+})
 
-    local ix = ix or {}
-    ix.ClearItems = ix.ClearItems or {
-        [ "ix_item" ]       = true,
-        [ "ix_money" ]      = true,
-        [ "ix_shipment" ]   = true
-    }
+if (SERVER) then
+    function PLUGIN:CreateTimer(delay)
+        if timer.Exists('itemCleaner') then
+            timer.Remove('itemCleaner')
+        end
+        if !delay then delay = 60*10 end
 
-    local function clear()
-        timer.Create("ixCleanMap", 60 * 10, 0, function()
-            for _, v in ipairs( ents.FindByClass( "*" ) ) do
-                if ix.ClearItems[ v:GetClass() ] then
-                    v:Remove()
+        timer.Create('itemCleaner', delay, 0, function()
+            for _, ent in ipairs( ents.GetAll() ) do
+                if self.clearItems[ent:GetClass()] then
+                    SafeRemoveEntity(ent)
                 end
-            end
-
-            if !table.IsEmpty(ix.ClearItems) then
-                net.Start("ixClearItems::Notify")
-                net.Broadcast()
             end
         end)
     end
 
     function PLUGIN:InitPostEntity()
-        clear()
+        self:CreateTimer()
     end
-elseif (CLIENT) then
-    net.Receive("ixClearItems::Notify", function()
-        if ( LocalPlayer() ) then
-            notification.AddLegacy("Map trash has been cleared")
-        end
-    end)
 end
