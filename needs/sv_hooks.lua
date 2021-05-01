@@ -14,7 +14,7 @@ function PLUGIN:PlayerLoadedCharacter(client, character, _)
 
     local uniqueID = client:AccountID()
     if timer.Exists("ixPrimaryNeeds." .. uniqueID) then timer.Remove("ixPrimaryNeeds." .. uniqueID) end
-    if ( hook.Run("ShouldNeedsForPlayer", client, character) == false ) then return end
+    if ( hook.Run("EnableNeedsForCharacter", client, character) == false ) then return end
     self:CreateNeedsTimer(client, character)
 end
 
