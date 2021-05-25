@@ -17,6 +17,8 @@ if (SERVER) then
     function CHAR:DowngradeSatiety(value)
         if (self and IsValid(self:GetPlayer())) then
             local clamped = math.Round(math.Clamp(self:GetSatiety() - value, 0, 100))
+            local client = self:GetPlayer()
+            client:SetLocalVar("satiety", clamped)
             self:SetSatiety(clamped)
         end
     end
@@ -24,6 +26,8 @@ if (SERVER) then
     function CHAR:DowngradeSaturation(value)
         if (self and IsValid(self:GetPlayer())) then
             local clamped = math.Round(math.Clamp(self:GetSaturation() - value, 0, 100))
+            local client = self:GetPlayer()
+            client:SetLocalVar("saturation", clamped)
             self:SetSaturation(clamped)
         end
     end
@@ -31,6 +35,8 @@ if (SERVER) then
     function CHAR:RestoreSatiety(value)
         if (self and IsValid(self:GetPlayer())) then
             local clamped = math.Round(math.Clamp(self:GetSatiety() + value, 0, 100))
+            local client = self:GetPlayer()
+            client:SetLocalVar("satiety", clamped)
             self:SetSatiety(clamped)
         end
     end
@@ -38,6 +44,8 @@ if (SERVER) then
     function CHAR:RestoreSaturation(value)
         if (self and IsValid(self:GetPlayer())) then
             local clamped = math.Round(math.Clamp(self:GetSaturation() + value, 0, 100))
+            local client = self:GetPlayer()
+            client:SetLocalVar("saturation", clamped)
             self:SetSaturation(clamped)
         end
     end
