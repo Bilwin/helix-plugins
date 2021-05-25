@@ -1,6 +1,19 @@
 
 local PLUGIN = PLUGIN
 
+function PLUGIN:CharacterVarChanged(character, key, oldValue, value)
+    local client = character:GetPlayer()
+    if (client and IsValid(client)) then
+        if (key == "saturation") then
+            client:SetLocalVar("saturation", value)
+        end
+
+        if (key == "satiety") then
+            client:SetLocalVar("satiety", value)
+        end
+    end
+end
+
 function PLUGIN:PlayerLoadedCharacter(client, character, _)
     if !IsValid(client) and !client:IsPlayer() and !character then return end
     if (character:GetSaturation()) then
