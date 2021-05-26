@@ -16,7 +16,7 @@ function INVENTORY:GetStackCount(uniqueID)
 	end
 end
 
--- Replace original helix INVENTORY:GetItemCount function
+-- Rewrite original helix INVENTORY:GetItemCount function
 function INVENTORY:GetItemCount(uniqueID, onlyMain)
 	local originalList = ix.item.list[uniqueID]
 	local bIsStacking = originalList.base == 'base_stackable'
