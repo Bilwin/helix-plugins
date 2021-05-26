@@ -11,7 +11,6 @@
 	</a>
 </p>
 
-Helix is a framework for roleplay gamemodes in [Garry's Mod](https://gmod.facepunch.com/), based off of [NutScript 1.1](https://github.com/rebel1324/NutScript). Helix provides a stable, feature-filled, open-source, and DRM-free base so you can focus more on the things you want: making gameplay.
+[Helix](https://github.com/NebulousCloud/helix/) is a framework for roleplay gamemodes in [Garry's Mod](https://gmod.facepunch.com/), based off of [NutScript 1.1](https://github.com/rebel1324/NutScript). Helix provides a stable, feature-filled, open-source, and DRM-free base so you can focus more on the things you want: making gameplay.
 
-## Helix Link
-https://github.com/NebulousCloud/helix/
+
