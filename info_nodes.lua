@@ -3,6 +3,7 @@ PLUGIN.name = "Nodes"
 PLUGIN.description = "Comment areas"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
+PLUGIN.version = 1.0
 
 function PLUGIN:SetupAreaProperties()
     ix.area.AddType("comment")

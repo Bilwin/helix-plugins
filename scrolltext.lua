@@ -5,6 +5,7 @@ PLUGIN.name = "Scroll Text"
 PLUGIN.description = "Provides an interface for drawing and sending 'scrolling text.'"
 PLUGIN.author = "Chessnut"
 PLUGIN.schema = "Any"
+PLUGIN.version = 1.0
 
 if !netstream then return end
 
