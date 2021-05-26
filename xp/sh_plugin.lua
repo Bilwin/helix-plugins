@@ -3,6 +3,7 @@ PLUGIN.name = "XP System"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "..."
 PLUGIN.schema = "any"
+PLUGIN.version = 1.0
 PLUGIN.license = [[
     This is free and unencumbered software released into the public domain.
     Anyone is free to copy, modify, publish, use, compile, sell, or

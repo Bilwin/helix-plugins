@@ -3,6 +3,7 @@ PLUGIN.name = "Diseases"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "Adding diseases"
 PLUGIN.schema = "Any"
+PLUGIN.version = 'deprecated'
 PLUGIN.license = [[
     This is free and unencumbered software released into the public domain.
     Anyone is free to copy, modify, publish, use, compile, sell, or
