@@ -57,6 +57,6 @@ ITEM.functions.split = {
 		return false
 	end,
 	OnCanRun = function(item)
-		return item:GetData('stacks', 1) ~= 1
+		return (item:GetData('stacks', 1) ~= 1 and (item:GetOwner() ~= nil))
 	end
 }
