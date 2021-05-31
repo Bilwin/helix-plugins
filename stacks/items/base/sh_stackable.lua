@@ -24,7 +24,7 @@ ITEM.functions.combine = {
         if (firstItem.uniqueID ~= secondItem.uniqueID) then return false end
         if (totalStacks > firstItem.maxStacks) then return false end
 
-		firstItem:SetData('stacks', totalStacks)
+		firstItem:SetData("stacks", totalStacks, ix.inventory.Get(firstItem.invID):GetReceivers())
 		secondItem:Remove()
 
 		return false
@@ -52,11 +52,11 @@ ITEM.functions.split = {
 				ix.item.Spawn(itemUniqueID, client, nil, angle_zero, {stacks = cleanSplitStack})
 			end
 
-			item:SetData('stacks', stackedCount)
+			item:SetData("stacks", stackedCount, ix.inventory.Get(item.invID):GetReceivers())
 		end, '1')
 		return false
 	end,
 	OnCanRun = function(item)
-		return (item:GetData('stacks', 1) ~= 1 and (item:GetOwner() ~= nil))
+		return (item:GetData('stacks', 1) ~= 1)
 	end
 }
