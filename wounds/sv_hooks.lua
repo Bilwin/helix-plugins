@@ -57,7 +57,6 @@ function PLUGIN:SetBleeding(client, status)
 
                 if (client:Health() <= 0) then
                     client:Kill()
-                    self:ClearWounds(client)
                 end
             end
         end)
