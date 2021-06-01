@@ -54,11 +54,6 @@ function PLUGIN:SetBleeding(client, status)
             if IsValid(client) and character then
                 client:SetHealth( client:Health() - math.random(3) )
                 client:ScreenFade( SCREENFADE.IN, Color(255, 0, 0, 128), 0.3, 0 )
-
-                if (client:Health() <= 0) then
-                    client:Kill()
-                    self:ClearWounds(client)
-                end
             end
         end)
     else
