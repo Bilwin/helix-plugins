@@ -1,9 +1,10 @@
 
+local PLUGIN = PLUGIN
 PLUGIN.name = "XP System"
 PLUGIN.author = "Bilwin"
-PLUGIN.description = "..."
+PLUGIN.description = "Adds XP whitelisted system"
 PLUGIN.schema = "any"
-PLUGIN.version = 1.0
+PLUGIN.version = 1.0.1
 PLUGIN.license = [[
     This is free and unencumbered software released into the public domain.
     Anyone is free to copy, modify, publish, use, compile, sell, or
@@ -32,37 +33,37 @@ PLUGIN.readme = [[
     The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
 ]]
 
-local ix = ix or {}
-ix.XPSystem = ix.XPSystem or {}
-ix.XPSystem.prefix = ix.XPSystem.prefix or "[IX:XP]"
-ix.XPSystem.whitelists = ix.XPSystem.whitelists or {
-    [FACTION_CITIZEN] = {
-        [CLASS_CITIZEN] = 0,
-        [CLASS_CWU]     = 5
-    },
-    [FACTION_MPF] = {
-        [CLASS_MPR]     = 50,
-        [CLASS_MPU]     = 75,
-        [CLASS_EMP]     = 100
-    },
-    [FACTION_OTA] = {
-        [CLASS_OWS]     = 200,
-        [CLASS_EOW]     = 300
-    },
-    [FACTION_ADMIN] = {
-        [CLASS_ADMIN]   = 600
-    }
+do
+    ix.char.RegisterVar("XP", {
+        field = "XP",
+        fieldType = ix.type.number,
+        isLocal = true,
+        bNoDisplay = true,
+        default = 0
+    })
+end
+
+ix.XPSystem = {}
+ix.XPSystem.whitelists = {
+    --[FACTION_CITIZEN] = {
+    --    [CLASS_CITIZEN] = 0,
+    --    [CLASS_CWU]     = 5
+    --},
+    --[FACTION_MPF] = {
+    --    [CLASS_MPR]     = 50,
+    --    [CLASS_MPU]     = 75,
+    --    [CLASS_EMP]     = 100
+    --},
+    --[FACTION_OTA] = {
+    --    [CLASS_OWS]     = 200,
+    --    [CLASS_EOW]     = 300
+    --},
+    --[FACTION_ADMIN] = {
+    --    [CLASS_ADMIN]   = 600
+    --}
 }
 
-ix.config.Add("maxXPGain", 5, "Points awarded when playing on the server", nil, {
-	data = {min = 0, max = 50},
-	category = "characters"
-})
-
-ix.config.Add("XPGainEnabled", true, "Will the XP auto-give system be enabled?.", nil, {
-	category = "characters"
-})
-
-ix.util.Include("sv_hooks.lua", "server")
-ix.util.Include("sh_meta.lua", "shared")
-ix.util.Include("sh_language.lua", "shared")
+ix.util.Include("sh_config.lua")
+ix.util.Include("sv_hooks.lua")
+ix.util.Include("sh_meta.lua")
+ix.util.Include("sh_language.lua")
