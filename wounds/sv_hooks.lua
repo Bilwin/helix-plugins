@@ -71,6 +71,7 @@ function PLUGIN:SetFracture(client, status)
     local character = client:GetCharacter()
     local bStatus = hook.Run("CanCharacterGetFracture", client, character)
     if (bStatus) then return end
+    if !character then return end
 
     character:SetFracture(status)
     if (status) then
