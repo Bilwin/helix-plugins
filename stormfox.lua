@@ -37,7 +37,7 @@ if (SERVER) then
         RunConsoleCommand("sf_windmove_props_makedebris", 0)
     end
 
-    hook.add("StormFox2.InitPostEntity", "stormfox:StormFox2.InitPostEntity", function()
+    hook.Add("StormFox2.InitPostEntity", "stormfox:StormFox2.InitPostEntity", function()
         local localTime = ix.date.GetFormatted('%H:%M')
         local validTime = StormFox2.Time.StringToTime(localTime)
         StormFox2.Time.Set(validTime)
