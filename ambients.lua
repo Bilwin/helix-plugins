@@ -76,7 +76,7 @@ if (CLIENT) then
             local mSongPath = mSongTable.path
             local mSongDuration = mSongTable.duration or _SoundDuration(mSongPath)
 
-            sound.play_file('sound/' .. mSongTable.path, 'noblock', function(radio)
+            sound.PlayFile('sound/' .. mSongTable.path, 'noblock', function(radio)
                 if IsValid(radio) then
                     if IsValid(self.ambient) then self.ambient:Stop() end
 
@@ -91,15 +91,15 @@ if (CLIENT) then
     end
 
     net.Receive('ixPlayAmbient', function()
-        if !timer.exists('mAmbientMusicChecker') then
-            timer.create('mAmbientMusicChecker', 5, 0, function()
+        if !timer.Exists('mAmbientMusicChecker') then
+            timer.Create('mAmbientMusicChecker', 5, 0, function()
                 if (m_flAmbientCooldown or 0) > os.time() then return end
                 PLUGIN:CreateAmbient()
             end)
         end
 
-        if !timer.exists('mAmbientChecker') then
-            timer.create('mAmbientChecker', 0.5, 0, function()
+        if !timer.Exists('mAmbientChecker') then
+            timer.Create('mAmbientChecker', 0.5, 0, function()
                 if IsValid(ix.gui.characterMenu) and ix.config.Get("music") ~= "" then
                     if IsValid(PLUGIN.ambient) then
                         PLUGIN.ambient:SetVolume(0)
