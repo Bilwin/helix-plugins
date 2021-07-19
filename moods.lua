@@ -11,16 +11,14 @@ PLUGIN.version = 1.1
 do
     MOOD_NONE = 0
     MOOD_RELAXED = 1
-    MOOD_HEADSTRONG = 2
     MOOD_FRUSTRATED = 3
-	MOOD_MODEST = 4
+    MOOD_MODEST = 4
 
     PLUGIN.MoodTextTable = {
         [MOOD_NONE] = "Default",
         [MOOD_RELAXED] = "Relaxed",
-        [MOOD_HEADSTRONG] = "Headstrong",
         [MOOD_FRUSTRATED] = "Frustrated",
-		[MOOD_MODEST] = "Modest"
+	[MOOD_MODEST] = "Modest"
     }
 
     PLUGIN.MoodBadMovetypes = {
@@ -34,17 +32,14 @@ do
             [0] = "LineIdle01",
             [1] = "walk_all_Moderate"
         },
-        [MOOD_HEADSTRONG] = {
-            [0] = "trader_idle2"
-        },
         [MOOD_FRUSTRATED] = {
             [0] = "LineIdle02",
             [1] = "pace_all"
         },
-		[MOOD_MODEST] = {
-			[0] = "LineIdle04",
-			[1] = "plaza_walk_all"
-		}
+	[MOOD_MODEST] = {
+		[0] = "LineIdle04",
+		[1] = "plaza_walk_all"
+	}
     }
 end
 
@@ -58,7 +53,6 @@ do
 	if (SERVER) then
 		function meta:SetMood(int)
 			int = int or 0
-
 			self:SetNetVar("mood", int)
 		end
 	end
