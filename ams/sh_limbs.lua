@@ -52,6 +52,7 @@ PLUGIN.LimbWounds[HITGROUP_CHEST] = {
         end,
         onInstanced = function(client, character)
             character:AddDisease('example')
+            character:DecreaseChestHealthy(30)
         end
     }
 }
@@ -61,6 +62,9 @@ PLUGIN.LimbWounds[HITGROUP_STOMACH] = {
         chance = 80,
         filter = function(client, character)
             return client:Health() <= 70
+        end,
+        onInstanced = function(client, character)
+            character:DecreaseStomachHealthy(25)
         end
     }
 }
@@ -70,6 +74,9 @@ PLUGIN.LimbWounds[HITGROUP_LEFTARM] = {
         chance = 20,
         filter = function(client, character)
             return client:Health() <= 70
+        end,
+        onInstanced = function(client, character)
+            character:DecreaseLeftArmHealthy(15)
         end
     }
 }
@@ -79,6 +86,9 @@ PLUGIN.LimbWounds[HITGROUP_RIGHTARM] = {
         chance = 20,
         filter = function(client, character)
             return client:Health() <= 70
+        end,
+        onInstanced = function(client, character)
+            character:DecreaseRightArmHealthy(15)
         end
     }
 }
