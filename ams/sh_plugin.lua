@@ -6,7 +6,7 @@ PLUGIN.description = "Introduction of heavy medicine and new features"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
 
-if !ix.stdlib then return end
+if !ix.stdlib then error("You need to install stdlib!! https://github.com/Bilwin/helix-plugins/tree/main/!stdlib") return end
 
 ix.AMS = ix.AMS or {}
 ix.util.Include("sv_meta.lua")
