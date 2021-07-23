@@ -5,7 +5,7 @@ local CHAR = ix.meta.character
 function CHAR:AddDisease(uniqueID)
     if (ix.AMS.Diseases:FindByID(uniqueID)) then
         local diseaseTable = ix.AMS.Diseases:FindByID(uniqueID)
-        if table.has_value(diseaseTable.immuneFactions, self:GetFaction()) then return false end
+        if table.HasValue(diseaseTable.immuneFactions, self:GetFaction()) then return false end
         local storedDiseases = self:GetDiseases()
 
         if storedDiseases ~= '' then
@@ -17,7 +17,7 @@ function CHAR:AddDisease(uniqueID)
 
         local client = self:GetPlayer()
         diseaseTable.Infect(client, self)
-        hook.run('CharacterDiseased', self, diseaseTable)
+        hook.Run('CharacterDiseased', self, diseaseTable)
         return true
     end
 end
@@ -25,10 +25,10 @@ end
 function CHAR:RemoveDisease(uniqueID)
     if (ix.AMS.Diseases:FindByID(uniqueID)) then
         local diseaseTable = ix.AMS.Diseases:FindByID(uniqueID)
-        local storedDiseases = string.split(self:GetDiseases(),';')
+        local storedDiseases = string.Split(self:GetDiseases(),';')
 
-        if table.has_value(storedDiseases, uniqueID) then
-            table.remove_by_value(storedDiseases, uniqueID)
+        if table.HasValue(storedDiseases, uniqueID) then
+            table.RemoveByValue(storedDiseases, uniqueID)
             storedDiseases = table.concat(storedDiseases, ';')
         else
             return
@@ -37,7 +37,7 @@ function CHAR:RemoveDisease(uniqueID)
         self:SetDiseases(storedDiseases)
         local client = self:GetPlayer()
         diseaseTable.Disinfect(client, self)
-        hook.run('CharacterUndiseased', self, diseaseTable)
+        hook.Run('CharacterUndiseased', self, diseaseTable)
     end
 end
 
@@ -51,7 +51,7 @@ end
 function CHAR:AddWound(uniqueID)
     if (ix.AMS.Wounds:FindByID(uniqueID)) then
         local woundTable = ix.AMS.Wounds:FindByID(uniqueID)
-        if table.has_value(woundTable.immuneFactions, self:GetFaction()) then return false end
+        if table.HasValue(woundTable.immuneFactions, self:GetFaction()) then return false end
         local storedWounds = self:GetWounds()
 
         if storedWounds ~= '' then
@@ -63,7 +63,7 @@ function CHAR:AddWound(uniqueID)
 
         local client = self:GetPlayer()
         woundTable.Wounded(client, self)
-        hook.run('CharacterWounded', self, woundTable)
+        hook.Run('CharacterWounded', self, woundTable)
         return true
     end
 end
@@ -71,10 +71,10 @@ end
 function CHAR:RemoveWound(uniqueID)
     if (ix.AMS.Wounds:FindByID(uniqueID)) then
         local woundTable = ix.AMS.Wounds:FindByID(uniqueID)
-        local storedWounds = string.split(self:GetWounds(),';')
+        local storedWounds = string.Split(self:GetWounds(),';')
 
-        if table.has_value(storedWounds, uniqueID) then
-            table.remove_by_value(storedWounds, uniqueID)
+        if table.HasValue(storedWounds, uniqueID) then
+            table.RemoveByValue(storedWounds, uniqueID)
             storedWounds = table.concat(storedWounds, ';')
         else
             return
@@ -83,7 +83,7 @@ function CHAR:RemoveWound(uniqueID)
         self:SetWounds(storedWounds)
         local client = self:GetPlayer()
         woundTable.Diswound(client, self)
-        hook.run('CharacterUnWounded', self, woundTable)
+        hook.Run('CharacterUnWounded', self, woundTable)
     end
 end
 

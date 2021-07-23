@@ -11,9 +11,9 @@ PLUGIN.defaultLimbsData = PLUGIN.defaultLimbsData or {
     ['headHealthy']         = 35
 }
 
-hook.add("InitializedPlugins", "Limbs:InitializedPlugins", function()
+hook.Add("InitializedPlugins", "Limbs:InitializedPlugins", function()
     for key, default in pairs( PLUGIN.defaultLimbsData ) do
-        ix.char.register_var(key, {
+        ix.char.RegisterVar(key, {
             field = key,
             fieldType = ix.type.number,
             default = default,
