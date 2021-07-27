@@ -18,18 +18,18 @@ function PLUGIN:PlayerTraceAttack(client, dmgInfo, dir, trace)
                 end
 
                 if isfunction(woundFilter) then
-                    local status = woundFilter(client, character)
+                    local status = woundFilter(client, character, dmgInfo, dir, trace)
                     if (status) then
                         if character:AddWound(woundID) then
                             if isfunction(woundOnInstanced) then
-                                woundOnInstanced(client, character)
+                                woundOnInstanced(client, character, dmgInfo, dir, trace)
                             end
                         end
                     end
                 else
                     if character:AddWound(woundID) then
                         if isfunction(woundOnInstanced) then
-                            woundOnInstanced(client, character)
+                            woundOnInstanced(client, character, dmgInfo, dir, trace)
                         end
                     end
                 end
@@ -48,18 +48,18 @@ function PLUGIN:PlayerTraceAttack(client, dmgInfo, dir, trace)
                         end
 
                         if isfunction(addictWoundFilter) then
-                            local addictStatus = addictWoundFilter(client, character)
+                            local addictStatus = addictWoundFilter(client, character, dmgInfo, dir, trace)
                             if (addictStatus) then
                                 if character:AddWound(addictWoundID) then
                                     if isfunction(addictWoundOnInstanced) then
-                                        addictWoundOnInstanced(client, character)
+                                        addictWoundOnInstanced(client, character, dmgInfo, dir, trace)
                                     end
                                 end
                             end
                         else
                             if character:AddWound(addictWoundID) then
                                 if isfunction(addictWoundOnInstanced) then
-                                    addictWoundOnInstanced(client, character)
+                                    addictWoundOnInstanced(client, character, dmgInfo, dir, trace)
                                 end
                             end
                         end

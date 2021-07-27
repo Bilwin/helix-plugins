@@ -38,7 +38,7 @@ PLUGIN.LimbWounds[HITGROUP_GEAR] = {
     {
         uniqueID = 'example',
         chance = 75,
-        filter = function(client, character)
+        filter = function(client, character, dmgInfo, dir, trace)
             return client:Health() <= 70
         end
     }
@@ -47,10 +47,10 @@ PLUGIN.LimbWounds[HITGROUP_CHEST] = {
     {
         uniqueID = 'example',
         chance = 75,
-        filter = function(client, character)
+        filter = function(client, character, dmgInfo, dir, trace)
             return client:Health() <= 70
         end,
-        onInstanced = function(client, character)
+        onInstanced = function(client, character, dmgInfo, dir, trace)
             character:AddDisease('example')
             character:DecreaseChestHealthy(30)
         end
@@ -60,10 +60,10 @@ PLUGIN.LimbWounds[HITGROUP_STOMACH] = {
     {
         uniqueID = 'example',
         chance = 80,
-        filter = function(client, character)
+        filter = function(client, character, dmgInfo, dir, trace)
             return client:Health() <= 70
         end,
-        onInstanced = function(client, character)
+        onInstanced = function(client, character, dmgInfo, dir, trace)
             character:DecreaseStomachHealthy(25)
         end
     }
@@ -72,10 +72,10 @@ PLUGIN.LimbWounds[HITGROUP_LEFTARM] = {
     {
         uniqueID = 'example',
         chance = 20,
-        filter = function(client, character)
+        filter = function(client, character, dmgInfo, dir, trace)
             return client:Health() <= 70
         end,
-        onInstanced = function(client, character)
+        onInstanced = function(client, character, dmgInfo, dir, trace)
             character:DecreaseLeftArmHealthy(15)
         end
     }
@@ -84,10 +84,10 @@ PLUGIN.LimbWounds[HITGROUP_RIGHTARM] = {
     {
         uniqueID = 'example',
         chance = 20,
-        filter = function(client, character)
+        filter = function(client, character, dmgInfo, dir, trace)
             return client:Health() <= 70
         end,
-        onInstanced = function(client, character)
+        onInstanced = function(client, character, dmgInfo, dir, trace)
             character:DecreaseRightArmHealthy(15)
         end
     }
