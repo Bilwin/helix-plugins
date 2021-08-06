@@ -2,6 +2,7 @@
 PLUGIN.name = "Trashpiles"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
+PLUGIN.version = 1.0
 
 do
     ix.config.Add("trashPileItemDropChance", 40, "Item drop chance", nil, {

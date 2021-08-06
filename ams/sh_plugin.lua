@@ -4,6 +4,7 @@ PLUGIN.name = "Advanced Medical System"
 PLUGIN.description = "Introduction of heavy medicine and new features"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
+PLUGIN.version = 1.0
 
 ix.AMS = ix.AMS or {}
 ix.util.Include("sv_meta.lua")
