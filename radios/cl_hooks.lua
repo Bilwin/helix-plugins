@@ -1,3 +1,5 @@
+
+-- TODO: Screen scaling
 function PLUGIN:LoadFonts(font, genericFont)
     surface.CreateFont("ixRadio", {
         font = 'Didact Gothic',
