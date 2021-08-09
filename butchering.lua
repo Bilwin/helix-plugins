@@ -1,7 +1,8 @@
 
-PLUGIN.name = 'Corpse butchering'
-PLUGIN.author = 'Bilwin'
-PLUGIN.schema = 'Any'
+PLUGIN.name = "Corpse Butchering"
+PLUGIN.author = "Bilwin"
+PLUGIN.schema = "Any"
+PLUGIN.version = 1.1
 PLUGIN.license = [[
     This is free and unencumbered software released into the public domain.
     Anyone is free to copy, modify, publish, use, compile, sell, or
@@ -25,7 +26,7 @@ PLUGIN.license = [[
     For more information, please refer to <http://unlicense.org/>
 ]]
 
-ix.CorpseButchering = {
+PLUGIN.list = {
     --[[
     ['modelpath/modelname.mdl'] = {
         butcheringTime = 5,                                                                     -- How many seconds will the corpse be butchered
@@ -61,13 +62,13 @@ ix.CorpseButchering = {
 }
 
 if (SERVER) then
-    ix.log.AddType("playerButchered", function(pl, corpse)
-        return string.format("%s was butchered %s.", pl:Name(), corpse:GetModel())
+    ix.log.AddType("playerButchered", function(client, corpse)
+        return string.format("%s was butchered %s.", client:Name(), corpse:GetModel())
     end)
 
     util.AddNetworkString('ixClearClientRagdolls')
 	function PLUGIN:OnNPCKilled(npc, attacker, inflictor)
-        if IsValid(npc) and ix.CorpseButchering[npc:GetModel()] then
+        if IsValid(npc) and self.list[npc:GetModel()] then
             local ragdoll = ents.Create("prop_ragdoll")
             ragdoll:SetPos( npc:GetPos() )
             ragdoll:SetAngles( npc:EyeAngles() )
@@ -107,57 +108,60 @@ if (SERVER) then
         end
 	end
 
-    function PLUGIN:KeyPress(pl, key)
-        if ( pl:GetCharacter() and pl:Alive() ) then
+    function PLUGIN:KeyPress(client, key)
+        if ( client:GetCharacter() and client:Alive() ) then
             if ( key == IN_USE ) then
-                local HitPos = pl:GetEyeTraceNoCursor()
+                local HitPos = client:GetEyeTraceNoCursor()
                 local target = HitPos.Entity
-                if target and IsValid(target) and target:IsRagdoll() and ix.CorpseButchering[target:GetModel()] then
-                    local allowedWeapons = istable(ix.CorpseButchering[target:GetModel()].butcheringWeapons) and ix.CorpseButchering[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
-                    local canButchering = hook.Run('CanButchering', pl, target)
-                    if ( table.HasValue(allowedWeapons, pl:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and pl:IsWepRaised() and canButchering ) then
-                        local butcheringAnimation = isstring(ix.CorpseButchering[target:GetModel()].animation) and ix.CorpseButchering[target:GetModel()].animation or "Roofidle1"
-                        pl:ForceSequence(butcheringAnimation, nil, 0)
+                if target and IsValid(target) and target:IsRagdoll() and self.list[target:GetModel()] then
+                    local allowedWeapons = self.list[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
+                    local canButch = hook.Run('CanButchEntity', client, target)
+                    if ( table.HasValue(allowedWeapons, client:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and client:IsWepRaised() and canButch ) then
+                        local butchAnim = self.list[target:GetModel()].animation or "Roofidle1"
+                        local butchSound = self.list[target:GetModel()].slicingSound[1] or "ambient/machines/slicer1.wav"
+                        client:ForceSequence(butchAnim, nil, 0)
                         target:SetNetVar('cutting', true)
-                        target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[1]) or "ambient/machines/slicer1.wav" )
-
-                        local physObj, butcheringTime = target:GetPhysicsObject(), isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) and ix.CorpseButchering[target:GetModel()].butcheringTime or 2
-
-                        if ( IsValid(physObj) and !isnumber(ix.CorpseButchering[target:GetModel()].butcheringTime) ) then
+                        target:EmitSound(butchSound)
+ 
+                        local physObj, butcheringTime = target:GetPhysicsObject(), self.list[target:GetModel()].butcheringTime or 2
+                        if (IsValid(physObj) and !isnumber(self.list[target:GetModel()].butcheringTime) ) then
                             butcheringTime = math.Round( physObj:GetMass() )
                         end
 
-                        pl:SetAction("Разделываем...", butcheringTime)
-                        pl:DoStaredAction(target, function()
-                            if ( IsValid(pl) ) then
-                                pl:LeaveSequence()
+                        client:SetAction("Butchering...", butcheringTime)
+                        client:DoStaredAction(target, function()
+                            if ( IsValid(client) ) then
+                                client:LeaveSequence()
 
                                 if IsValid(target) then
                                     target:SetNetVar('cutting', nil)
-                                    target:EmitSound( (istable(ix.CorpseButchering[target:GetModel()].slicingSound) and ix.CorpseButchering[target:GetModel()].slicingSound[2] or "ambient/machines/slicer4.wav") )
+                                    butchSound = self.list[target:GetModel()].slicingSound[2] or "ambient/machines/slicer4.wav"
+                                    target:EmitSound(butchSound)
 
                                     local effect = EffectData()
                                         effect:SetStart(target:LocalToWorld(target:OBBCenter()))
                                         effect:SetOrigin(target:LocalToWorld(target:OBBCenter()))
                                         effect:SetScale(3)
-                                    util.Effect(ix.CorpseButchering[target:GetModel()].impactEffect or "BloodImpact", effect)
+                                    util.Effect(self.list[target:GetModel()].impactEffect or "BloodImpact", effect)
 
-                                    local butcheringItems = istable(ix.CorpseButchering[target:GetModel()].items) and ix.CorpseButchering[target:GetModel()].items or {}
+                                    local butcheringItems = self.list[target:GetModel()].items or {}
                                     if !table.IsEmpty(butcheringItems) then
-                                        for _, item in ipairs( butcheringItems ) do
-                                            pl:GetCharacter():GetInventory():Add(item)
+                                        for _, item in ipairs(butcheringItems) do
+                                            if !client:GetCharacter():GetInventory():Add(item) then
+                                                ix.item.Spawn(item, client)
+                                            end
                                         end
                                     end
 
-                                    ix.log.Add(pl, "playerButchered", target)
-                                    hook.Run('OnButchered', pl, target)
+                                    ix.log.Add(client, "playerButchered", target)
+                                    hook.Run('OnButchered', client, target)
                                     target:Remove()
                                 end
                             end
                         end, butcheringTime, function()
-                            if ( IsValid(pl) ) then
-                                pl:SetAction()
-                                pl:LeaveSequence()
+                            if ( IsValid(client) ) then
+                                client:SetAction()
+                                client:LeaveSequence()
                                 target:SetNetVar('cutting', false)
                             end
                         end)
@@ -167,7 +171,7 @@ if (SERVER) then
         end
     end
 
-    function PLUGIN:CanButchering(pl, target)
+    function PLUGIN:CanButchEntity(client, target)
         return true
     end
 end
@@ -175,7 +179,7 @@ end
 if (CLIENT) then
     net.Receive('ixClearClientRagdolls', function(len)
         local model = net.ReadString()
-        timer.Simple(.01, function()
+        timer.Simple(FrameTime() * 2, function()
             for _, ragdoll in ipairs( ents.GetAll() ) do
                 if (ragdoll:GetClass() == 'class C_ClientRagdoll' and ragdoll:GetModel() == model) then
                     ragdoll:Remove()
