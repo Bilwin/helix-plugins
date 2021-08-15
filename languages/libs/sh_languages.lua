@@ -23,7 +23,7 @@ function LANGUAGE_TABLE:Override(varName, value)
 end
 
 function ix.languages:GetAll()
-    return self.stored || false
+    return self.stored
 end
 
 function ix.languages:New(language)
