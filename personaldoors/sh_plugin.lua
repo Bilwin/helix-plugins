@@ -1,6 +1,6 @@
 
 local PLUGIN = PLUGIN
-PLUGIN.name = "Private Doors"
+PLUGIN.name = "Personal Doors"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "Allows you to add a player as a door owner"
 PLUGIN.version = 1.0
