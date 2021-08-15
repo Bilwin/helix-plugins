@@ -18,7 +18,7 @@ end
 
 if (SERVER) then
     function CHAR:AddLanguage(language)
-        local langTable = ix.RPLanguages:GetAll()[language]
+        local langTable = ix.languages:GetAll()[language]
         if (langTable) then
             if self:CanSpeakLanguage(language) then return end
             self:SetAdditionalLanguages( tostring( self:GetAdditionalLanguages() ) .. ';' .. tostring( language ) )
@@ -29,7 +29,7 @@ if (SERVER) then
     end
 
     function CHAR:RemoveLanguage(language)
-        local langTable = ix.RPLanguages:GetAll()[language]
+        local langTable = ix.languages:GetAll()[language]
         if (langTable) then
             if self:GetAdditionalLanguages():find(tostring(language)) then
                 local charLanguages = string.Split( tostring(self:GetAdditionalLanguages()), ';' )

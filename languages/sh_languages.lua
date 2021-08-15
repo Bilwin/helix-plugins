@@ -1,7 +1,7 @@
 
 local PLUGIN = PLUGIN
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Russian"
     LANGUAGE.uniqueID = "language_ru"
     LANGUAGE.category = "Human"
@@ -16,7 +16,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in russian"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "German"
     LANGUAGE.uniqueID = "language_ger"
     LANGUAGE.category = "Human"
@@ -31,7 +31,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in german"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Bulgarian"
     LANGUAGE.uniqueID = "language_bg"
     LANGUAGE.category = "Human"
@@ -46,7 +46,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in bulgarian"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Arabic"
     LANGUAGE.uniqueID = "language_ara"
     LANGUAGE.category = "Human"
@@ -61,7 +61,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in arabic"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Vortigese"
     LANGUAGE.uniqueID = "language_vo"
     LANGUAGE.category = "Off-Human"
@@ -76,7 +76,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in vortigese"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Xenian"
     LANGUAGE.uniqueID = "language_xen"
     LANGUAGE.category = "Off-Human"
@@ -91,7 +91,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in xenian"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Hindi"
     LANGUAGE.uniqueID = "language_hin"
     LANGUAGE.category = "Human"
@@ -106,7 +106,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in hindi"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Bengali"
     LANGUAGE.uniqueID = "language_ben"
     LANGUAGE.category = "Human"
@@ -121,7 +121,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in bengali"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Italian"
     LANGUAGE.uniqueID = "language_ita"
     LANGUAGE.category = "Human"
@@ -136,7 +136,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in italian"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Japanese"
     LANGUAGE.uniqueID = "language_jap"
     LANGUAGE.category = "Human"
@@ -151,7 +151,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in japanese"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Portuguese"
     LANGUAGE.uniqueID = "language_por"
     LANGUAGE.category = "Human"
@@ -166,7 +166,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in portuguese"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Spanish"
     LANGUAGE.uniqueID = "language_spa"
     LANGUAGE.category = "Human"
@@ -181,7 +181,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in spanish"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Farsi"
     LANGUAGE.uniqueID = "language_far"
     LANGUAGE.category = "Human"
@@ -196,7 +196,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in farsi"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Malay"
     LANGUAGE.uniqueID = "language_mal"
     LANGUAGE.category = "Human"
@@ -211,7 +211,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in malay"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Swahili"
     LANGUAGE.uniqueID = "language_swa"
     LANGUAGE.category = "Human"
@@ -226,7 +226,7 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYellingUnknown = "%s yelling something in swahili"
 LANGUAGE:Register()
 
-local LANGUAGE = ix.RPLanguages:New()
+local LANGUAGE = ix.languages:New()
     LANGUAGE.name = "Urdu"
     LANGUAGE.uniqueID = "language_urd"
     LANGUAGE.category = "Human"
@@ -240,201 +240,3 @@ local LANGUAGE = ix.RPLanguages:New()
     LANGUAGE.formatYelling = "%s yelling in urdu \"%s\""
     LANGUAGE.formatYellingUnknown = "%s yelling something in urdu"
 LANGUAGE:Register()
-
-do
-    local stored = ix.RPLanguages:GetAll()
-    for _, lang in pairs( stored ) do
-        -- IC/Normal talking
-        ix.command.Add(string.Replace(lang.uniqueID, 'language_', ''), {
-            arguments = ix.type.text,
-            description = "Allows you to say something in " .. string.lower(lang.name) .. " language",
-            OnRun = function(_, pl, message)
-                if !pl:GetCharacter() then return end
-                if !message || message == "" then return end
-                if pl:GetCharacter():CanSpeakLanguage(lang.uniqueID) then
-                    ix.chat.Send(pl, lang.uniqueID, message)
-                    ix.chat.Send(pl, lang.uniqueID .. "_unknown", message)
-                else
-                    pl:Notify('You don\'t know such a language!')
-                end
-            end
-        })
-
-		ix.chat.Register(lang.uniqueID, {
-            format = lang.format,
-            icon = lang.chatIcon,
-            deadCanChat = false,
-            indicator = "chatTalking",
-			GetColor = function(self, speaker, text)
-				if (LocalPlayer():GetEyeTrace().Entity == speaker) then
-					return ix.config.Get("chatListenColor")
-				end
-
-				return ix.config.Get("chatColor")
-			end,
-            CanHear = function(self, speaker, listener)
-                local chatRange = ix.config.Get("chatRange", 280)
-                return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= (chatRange * chatRange) and listener:GetCharacter():CanSpeakLanguage(tostring(lang.uniqueID))
-            end
-        })
-
-		ix.chat.Register(lang.uniqueID .. "_unknown", {
-            format = lang.formatUnknown,
-            icon = lang.chatIcon,
-            deadCanChat = false,
-            indicator = "chatTalking",
-			GetColor = function(self, speaker, text)
-				if (LocalPlayer():GetEyeTrace().Entity == speaker) then
-					return ix.config.Get("chatListenColor")
-				end
-
-				return ix.config.Get("chatColor")
-			end,
-            CanHear = function(self, speaker, listener)
-                local chatRange = ix.config.Get("chatRange", 280)
-                return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= (chatRange * chatRange) and !listener:GetCharacter():CanSpeakLanguage(tostring(lang.uniqueID))
-            end,
-            OnChatAdd = function(self, speaker, text, bAnonymous, data)
-                local color = self:GetColor(self, speaker, text)
-                local icon = ix.util.GetMaterial(self.icon)
-                local name = bAnonymous and L"someone" or
-                    hook.Run("GetCharacterName", speaker, "ic") or
-                    (IsValid(speaker) and speaker:Name() or "Console")
-                chat.AddText(icon, color, string.format(self.format, name))
-            end
-        })
-
-        -- Whispering
-        ix.command.Add('whisper_' .. string.Replace(lang.uniqueID, 'language_', ''), {
-            arguments = ix.type.text,
-            description = "Allows you to whisper something on " .. string.lower(lang.name) .. " language",
-            OnRun = function(_, pl, message)
-                if !pl:GetCharacter() then return end
-                if !message || message == "" then return end
-                if pl:GetCharacter():CanSpeakLanguage(lang.uniqueID) then
-                    ix.chat.Send(pl, "whisper_" .. lang.uniqueID, message)
-                    ix.chat.Send(pl, "whisper_" .. lang.uniqueID .. "_unknown", message)
-                else
-                    pl:Notify('You don\'t know such a language!')
-                end
-            end
-        })
-
-		ix.chat.Register("whisper_" .. lang.uniqueID, {
-            format = lang.formatWhispering,
-            icon = lang.chatIcon,
-            deadCanChat = false,
-            indicator = "chatWhispering",
-			GetColor = function(self, speaker, text)
-				if (LocalPlayer():GetEyeTrace().Entity == speaker) then
-					return ix.config.Get("chatListenColor")
-				end
-
-				return ix.config.Get("chatColor")
-			end,
-            CanHear = function(self, speaker, listener)
-                local chatRange = ix.config.Get("chatRange", 280)
-                return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= ((chatRange * chatRange) * 0.25) and listener:GetCharacter():CanSpeakLanguage(tostring(lang.uniqueID))
-            end
-        })
-
-		ix.chat.Register("whisper_" .. lang.uniqueID .. "_unknown", {
-            format = lang.formatWhisperingUnknown,
-            icon = lang.chatIcon,
-            deadCanChat = false,
-            indicator = "chatWhispering",
-			GetColor = function(self, speaker, text)
-				if (LocalPlayer():GetEyeTrace().Entity == speaker) then
-					return ix.config.Get("chatListenColor")
-				end
-
-				return ix.config.Get("chatColor")
-			end,
-            CanHear = function(self, speaker, listener)
-                local chatRange = ix.config.Get("chatRange", 280)
-                return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= ((chatRange * chatRange) * 0.25) and !listener:GetCharacter():CanSpeakLanguage(tostring(lang.uniqueID))
-            end,
-            OnChatAdd = function(self, speaker, text, bAnonymous, data)
-                local color = self:GetColor(self, speaker, text)
-                local icon = ix.util.GetMaterial(self.icon)
-                local name = bAnonymous and L"someone" or
-                    hook.Run("GetCharacterName", speaker, "ic") or
-                    (IsValid(speaker) and speaker:Name() or "Console")
-                chat.AddText(icon, color, string.format(self.format, name))
-            end
-        })
-
-        -- Yelling
-        ix.command.Add('yell_' .. string.Replace(lang.uniqueID, 'language_', ''), {
-            arguments = ix.type.text,
-            description = "Lets you yell something at " .. string.lower(lang.name) .. " language",
-            OnRun = function(_, pl, message)
-                if !pl:GetCharacter() then return end
-                if !message || message == "" then return end
-                if pl:GetCharacter():CanSpeakLanguage(lang.uniqueID) then
-                    ix.chat.Send(pl, "yell_" .. lang.uniqueID, message)
-                    ix.chat.Send(pl, "yell_" .. lang.uniqueID .. "_unknown", message)
-                else
-                    pl:Notify('You don\'t know such a language!')
-                end
-            end
-        })
-
-		ix.chat.Register("yell_" .. lang.uniqueID, {
-            format = lang.formatYelling,
-            icon = lang.chatIcon,
-            deadCanChat = false,
-            indicator = "chatYelling",
-			GetColor = function(self, speaker, text)
-				if (LocalPlayer():GetEyeTrace().Entity == speaker) then
-					return ix.config.Get("chatListenColor")
-				end
-
-				return ix.config.Get("chatColor")
-			end,
-            CanHear = function(self, speaker, listener)
-                local chatRange = ix.config.Get("chatRange", 280)
-                return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= ((chatRange * chatRange) * 2) and listener:GetCharacter():CanSpeakLanguage(tostring(lang.uniqueID))
-            end
-        })
-
-		ix.chat.Register("yell_" .. lang.uniqueID .. "_unknown", {
-            format = lang.formatYellingUnknown,
-            icon = lang.chatIcon,
-            deadCanChat = false,
-            indicator = "chatYelling",
-			GetColor = function(self, speaker, text)
-				if (LocalPlayer():GetEyeTrace().Entity == speaker) then
-					return ix.config.Get("chatListenColor")
-				end
-
-				return ix.config.Get("chatColor")
-			end,
-            CanHear = function(self, speaker, listener)
-                local chatRange = ix.config.Get("chatRange", 280)
-                return (speaker:GetPos() - listener:GetPos()):LengthSqr() <= ((chatRange * chatRange) * 2) and !listener:GetCharacter():CanSpeakLanguage(tostring(lang.uniqueID))
-            end,
-            OnChatAdd = function(self, speaker, text, bAnonymous, data)
-                local color = self:GetColor(self, speaker, text)
-                local icon = ix.util.GetMaterial(self.icon)
-                local name = bAnonymous and L"someone" or
-                    hook.Run("GetCharacterName", speaker, "ic") or
-                    (IsValid(speaker) and speaker:Name() or "Console")
-                chat.AddText(icon, color, string.format(self.format, name))
-            end
-        })
-
-        if (CLIENT) then
-            ix.command.list["yell_"..string.Replace(lang.uniqueID, 'language_', '')].OnCheckAccess = function(self, pl) return pl:GetCharacter():CanSpeakLanguage(lang.uniqueID) end
-            ix.command.list["whisper_"..string.Replace(lang.uniqueID, 'language_', '')].OnCheckAccess = function(self, pl) return pl:GetCharacter():CanSpeakLanguage(lang.uniqueID) end
-            ix.command.list[string.Replace(lang.uniqueID, 'language_', '')].OnCheckAccess = function(self, pl) return pl:GetCharacter():CanSpeakLanguage(lang.uniqueID) end
-
-            CHAT_RECOGNIZED[lang.uniqueID] = true
-            CHAT_RECOGNIZED[lang.uniqueID .. "_unknown"] = true
-            CHAT_RECOGNIZED["yell_" .. lang.uniqueID .. "_unknown"] = true
-            CHAT_RECOGNIZED["yell_" .. lang.uniqueID] = true
-            CHAT_RECOGNIZED["whisper_" .. lang.uniqueID] = true
-            CHAT_RECOGNIZED["whisper_" .. lang.uniqueID .. "_unknown"] = true
-        end
-    end
-end
