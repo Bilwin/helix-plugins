@@ -1,4 +1,5 @@
 
+-- optimizate
 function PLUGIN:Think()
     local cameras_ents = ents.FindByClass("npc_combine_camera")
 
