@@ -6,9 +6,10 @@ local _SoundDuration = SoundDuration
 local _Ambients_Cooldown = 10
 
 PLUGIN.name = "Ambient Music"
-PLUGIN.description = "Adds background music (client-side)"
+PLUGIN.description = "Adds background music"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
+PLUGIN.version = 1.0
 PLUGIN.songs = {
     {path = "music/hl2_song13.mp3", duration = 54},
     {path = "music/hl2_song17.mp3", duration = 61},
