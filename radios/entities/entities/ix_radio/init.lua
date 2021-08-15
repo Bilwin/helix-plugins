@@ -1,4 +1,5 @@
 
+local PLUGIN = PLUGIN
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 
@@ -29,7 +30,7 @@ function ENT:Use(activator, caller)
 end
 
 function ENT:StopSoundAll()
-	for _, song in ipairs( ix.Radio.Songs.whitelisted ) do
+	for song in pairs(PLUGIN.songs) do
 		self:StopSound(song)
 	end
 end
@@ -38,9 +39,23 @@ function ENT:OnRemove()
 	self:StopSoundAll()
 end
 
+local function song_whitelisted(song)
+	local bStatus = false
+
+	for _song in pairs(PLUGIN.songs) do
+		if _song == song then
+			bStatus = true
+			break
+		end
+	end
+
+	return bStatus
+end
+
 function ENT:SelectSong(soundPath)
 	if IsValid(self) then
-		if !table.HasValue(ix.Radio.Songs.whitelisted, soundPath) then return end
+		if !song_whitelisted(soundPath) then return end
+
 		self:StopSoundAll()
 		timer.Simple(0.1, function()
 			if IsValid(self) then

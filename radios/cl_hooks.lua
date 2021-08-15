@@ -1,5 +1,6 @@
 
 -- TODO: Screen scaling
+local PLUGIN = PLUGIN
 function PLUGIN:LoadFonts(font, genericFont)
     surface.CreateFont("ixRadio", {
         font = 'Didact Gothic',
@@ -31,19 +32,19 @@ net.Receive("ixRadio", function(_)
     local scrollPanel = vgui.Create( "DScrollPanel", frame )
     scrollPanel:Dock( FILL )
 
-    for key, value in ipairs( ix.Radio.Songs ) do
+    for key, value in pairs(PLUGIN.songs) do
         key = vgui.Create('DButton', scrollPanel)
         key:SetSize(ScrW()*.225, ScrH()*.05)
         key:SetPos(ScrW()*.007, ScrH()*.04)
         key:SetFont('ixRadio')
-        key:SetText(value.name)
+        key:SetText(value)
         key:Dock(TOP)
         key.Color = Color(155, 155, 155, 25)
         key.DoClick = function()
             surface.PlaySound('helix/ui/press.wav')
             net.Start('ixRadio')
                 net.WriteEntity(radio)
-                net.WriteString(value.path)
+                net.WriteString(key)
             net.SendToServer()
         end
         key.OnCursorEntered = function()
@@ -55,11 +56,11 @@ net.Receive("ixRadio", function(_)
             else
                 self.Color.a = Lerp(0.075, self.Color.a , 25)
             end
-    
+
             if self:IsDown() then
                 self.Color.a = Lerp(0.075, self.Color.a , 75)
             end
-    
+
             draw.RoundedBox(0, 0, 0, w, h, self.Color)
             surface.SetDrawColor(5, 5, 5, 155)
             surface.DrawOutlinedRect(0, 0, w, h)
