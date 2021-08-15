@@ -18,7 +18,7 @@ do
         [MOOD_NONE] = "Default",
         [MOOD_RELAXED] = "Relaxed",
         [MOOD_FRUSTRATED] = "Frustrated",
-	[MOOD_MODEST] = "Modest"
+		[MOOD_MODEST] = "Modest"
     }
 
     PLUGIN.MoodBadMovetypes = {
@@ -36,10 +36,10 @@ do
             [0] = "LineIdle02",
             [1] = "pace_all"
         },
-	[MOOD_MODEST] = {
-		[0] = "LineIdle04",
-		[1] = "plaza_walk_all"
-	}
+		[MOOD_MODEST] = {
+			[0] = "LineIdle04",
+			[1] = "plaza_walk_all"
+		}
     }
 end
 
