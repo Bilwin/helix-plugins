@@ -44,8 +44,17 @@ do
     })
 end
 
-ix.util.Include( "sv_hooks.lua", "server" )
-ix.util.Include( "sh_meta.lua", "shared" )
-ix.util.Include( "sh_config.lua", "shared" )
-ix.util.Include( "sh_commands.lua", "shared" )
-ix.util.Include( "cl_bars.lua", "client" )
+ix.util.Include("sv_hooks.lua")
+ix.util.Include("sh_meta.lua")
+ix.util.Include("sh_config.lua")
+ix.util.Include("sh_commands.lua")
+
+if CLIENT then
+    ix.bar.Add( function()
+		return math.max( LocalPlayer():GetLocalVar("saturation") / 100, 0 )
+	end, Color( 68, 106, 205 ), nil, "saturation", "hudSaturation" )
+
+	ix.bar.Add( function()
+		return math.max( LocalPlayer():GetLocalVar("satiety") / 100, 0 )
+	end, Color( 203, 151, 0 ), nil, "satiety", "hudSatiety" )
+end

@@ -1,9 +1,6 @@
 
 ITEM.name = "Foods"
 ITEM.model = "models/props_junk/garbage_metalcan001a.mdl"
-ITEM.description = "..."
-ITEM.width = 1
-ITEM.height = 1
 ITEM.category = "Consumables"
 
 ITEM.useSound = "items/medshot4.wav"

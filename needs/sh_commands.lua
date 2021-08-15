@@ -77,7 +77,8 @@ do
         },
         OnRun = function(self, client, target, amount)
             if !client:GetCharacter() then return end
-            if (IsValid(target:GetPlayer()) and target) then
+            if target then
+                if !amount then amount = 100 end
                 local clamped = math.Round(math.Clamp(amount, 0, 100))
                 target:SetSatiety(clamped)
             end
@@ -94,7 +95,8 @@ do
         },
         OnRun = function(self, client, target, amount)
             if !client:GetCharacter() then return end
-            if (IsValid(target:GetPlayer()) and target) then
+            if target then
+                if !amount then amount = 100 end
                 local clamped = math.Round(math.Clamp(amount, 0, 100))
                 target:SetSaturation(clamped)
             end
