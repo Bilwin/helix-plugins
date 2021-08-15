@@ -11,8 +11,8 @@ PLUGIN.defaultLimbsData = PLUGIN.defaultLimbsData or {
     ['headHealthy']         = 35
 }
 
-hook.Add("InitializedPlugins", "Limbs:InitializedPlugins", function()
-    for key, default in pairs( PLUGIN.defaultLimbsData ) do
+function PLUGIN:InitializedPlugins()
+    for key, default in pairs(self.defaultLimbsData) do
         ix.char.RegisterVar(key, {
             field = key,
             fieldType = ix.type.number,
@@ -20,7 +20,7 @@ hook.Add("InitializedPlugins", "Limbs:InitializedPlugins", function()
             bNoDisplay = true
         })
     end
-end)
+end
 
 PLUGIN.Limbs = PLUGIN.Limbs or {}
 PLUGIN.Limbs[HITGROUP_HEAD]     = true
