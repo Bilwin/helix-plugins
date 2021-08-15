@@ -6,16 +6,14 @@ PLUGIN.description = "Just garbage (ix_item) cleaner"
 PLUGIN.schema = "Any"
 PLUGIN.garbage = {'ix_item'}
 
-if !ix.stdlib then return end
-
 do
     ix.config.Add("garbageCleanerEnabled", true, "Enable garbage (ix_item) cleaner?", function(_, newValue)
         if (SERVER) then
-            if (timer.exists('GarbageCleaner')) then
+            if (timer.Exists('GarbageCleaner')) then
                 if (newValue) then
-                    timer.start('GarbageCleaner')
+                    timer.Start('GarbageCleaner')
                 else
-                    timer.stop('GarbageCleaner')
+                    timer.Stop('GarbageCleaner')
                 end
             end
         end
@@ -25,8 +23,8 @@ do
 
     ix.config.Add("garbageCleanerDelay", 300, "How many seconds does a timer tick?", function(_, newValue)
         if (SERVER) then
-            if (timer.exists('GarbageCleaner')) then
-                timer.adjust('GarbageCleaner', newValue)
+            if (timer.Exists('GarbageCleaner')) then
+                timer.Adjust('GarbageCleaner', newValue)
             end
         end
     end, {
@@ -37,12 +35,12 @@ end
 
 if (SERVER) then
     function PLUGIN:CreateGarbageCleaner(delay)
-        if (timer.exists('GarbageCleaner')) then timer.remove('GarbageCleaner') end
+        if (timer.Exists('GarbageCleaner')) then timer.Remove('GarbageCleaner') end
 
         local delay = ix.config.Get('garbageCleanerDelay', 300)
-        timer.create('GarbageCleaner', delay, 0, function()
+        timer.Create('GarbageCleaner', delay, 0, function()
             for _, ent in ipairs( ents.GetAll() ) do
-                if !table.has_value(self.garbage, ent:GetClass()) then continue end
+                if !table.HasValue(self.garbage, ent:GetClass()) then continue end
                 SafeRemoveEntity(ent)
             end
         end)
