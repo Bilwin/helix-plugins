@@ -65,5 +65,4 @@ ix.XPSystem.whitelists = {
 
 ix.util.Include("sh_config.lua")
 ix.util.Include("sv_hooks.lua")
-ix.util.Include("sh_meta.lua")
 ix.util.Include("sh_language.lua")
