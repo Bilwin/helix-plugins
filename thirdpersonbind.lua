@@ -11,6 +11,7 @@ if (CLIENT) then
             if (IsFirstTimePredicted()) then
                 if (Cooldown or 0) < CurTime() then
                     RunConsoleCommand("ix_togglethirdperson")
+                    Cooldown = CurTime() + 0.1
                 end
             end
         end
