@@ -4,15 +4,15 @@ PLUGIN.author = 'Bilwin'
 PLUGIN.description = 'Allows using screen clicker'
 
 if (CLIENT) then
-    local m_bScreenClickerEnabled = false
+    local Enabled = false
+    local Cooldown
     function PLUGIN:PlayerButtonDown(me, button)
         if (button == KEY_F2) then
             if (IsFirstTimePredicted()) then
-                if (m_flF2KeyCooldown or 0) < RealTime() then
-                    local boolean = !m_bScreenClickerEnabled
-                    gui.EnableScreenClicker(boolean)
-                    m_flF2KeyCooldown = RealTime() + 0.1
-                    m_bScreenClickerEnabled = boolean
+                if (Cooldown or 0) < CurTime() then
+                    gui.EnableScreenClicker(!Enabled)
+                    Cooldown = CurTime() + 0.1
+                    Enabled = !Enabled
                 end
             end
         end
