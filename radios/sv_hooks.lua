@@ -7,11 +7,8 @@ net.Receive("ixRadio", function(_, pl)
     if !IsValid(radio) and !IsEntity(radio) then return end
     if radio:GetClass() ~= "ix_radio" then return end
 
-    for _, target in ipairs( ents.FindInSphere(radio:GetPos(), 155) ) do
-        if (target == pl) then
-            radio:SelectSong( songPath )
-        end
-    end
+	if radio:GetPos():DistToSqr( pl:GetPos() ) > 160 then return end
+	radio:SelectSong( songPath )
 end)
 
 function PLUGIN:SaveData()
