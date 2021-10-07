@@ -32,7 +32,7 @@ net.Receive("ixRadio", function(_)
     local scrollPanel = vgui.Create( "DScrollPanel", frame )
     scrollPanel:Dock( FILL )
 
-    for key, value in pairs(PLUGIN.songs) do
+    for key, value in pairs(PLUGIN.songs) do -- will be reworked soon
 	local songpath = key
         key = vgui.Create('DButton', scrollPanel)
         key:SetSize(ScrW()*.225, ScrH()*.05)
