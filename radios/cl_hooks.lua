@@ -33,6 +33,7 @@ net.Receive("ixRadio", function(_)
     scrollPanel:Dock( FILL )
 
     for key, value in pairs(PLUGIN.songs) do
+	local songpath = key
         key = vgui.Create('DButton', scrollPanel)
         key:SetSize(ScrW()*.225, ScrH()*.05)
         key:SetPos(ScrW()*.007, ScrH()*.04)
@@ -44,7 +45,7 @@ net.Receive("ixRadio", function(_)
             surface.PlaySound('helix/ui/press.wav')
             net.Start('ixRadio')
                 net.WriteEntity(radio)
-                net.WriteString(key)
+                net.WriteString(songpath)
             net.SendToServer()
         end
         key.OnCursorEntered = function()
