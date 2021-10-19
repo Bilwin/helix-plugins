@@ -7,8 +7,8 @@ if (CLIENT) then
     local Enabled = false
     local Cooldown
     function PLUGIN:PlayerButtonDown(me, button)
-        if (button == KEY_F2) then
-            if (IsFirstTimePredicted()) then
+        if button == KEY_F2 then
+            if IsFirstTimePredicted() then
                 if (Cooldown or 0) < CurTime() then
                     gui.EnableScreenClicker(!Enabled)
                     Cooldown = CurTime() + 0.1
