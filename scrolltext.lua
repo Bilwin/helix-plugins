@@ -7,13 +7,11 @@ PLUGIN.author = "Chessnut"
 PLUGIN.schema = "Any"
 PLUGIN.version = 1.0
 
-if !netstream then return end
-
 PLUGIN.scroll = PLUGIN.scroll or {}
 PLUGIN.scroll.buffer = PLUGIN.scroll.buffer or {}
 
 local CHAR_DELAY = 0.1
-if (CLIENT) then
+if CLIENT then
     function PLUGIN:AddText(text, callback)
         local info = {text = "", callback = callback, nextChar = 0, char = ""}
 		local index = table.insert(self.scroll.buffer, info)
@@ -40,7 +38,7 @@ if (CLIENT) then
 
     function PLUGIN:HUDPaint()
         local curTime = RealTime()
-		for k, v in pairs(self.scroll.buffer) do
+		for k, v in ipairs(self.scroll.buffer) do -- TO DO: check table key/index
 			local alpha = 255
 
 			if (v.start and v.finish) then
@@ -62,15 +60,18 @@ if (CLIENT) then
 		end
     end
 
-	netstream.Hook('ixScrollData', function(data)
-		PLUGIN:AddText(data)
+	net.Receive('ixScrollData', function(len)
+		PLUGIN:AddText(net.ReadString())
 	end)
 else
+	util.AddNetworkString("ixScrollData")
 	function PLUGIN:Send(text, receiver, callback)
-		netstream.Start(receiver, 'ixScrollData', text)
+		net.Start("ixScrollData")
+			net.WriteString(text)
+		net.Send(receiver)
 
-		timer.Simple(CHAR_DELAY*#text + 4, function()
-			if (callback) then
+		timer.Simple(CHAR_DELAY * #text + 4, function()
+			if callback then
 				callback()
 			end
 		end)
