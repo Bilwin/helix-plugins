@@ -108,15 +108,20 @@ if (SERVER) then
         end
 	end
 
+    local hook_Run = hook.Run
+    local math_ceil = math.ceil
+    local util_Effect = util.Effect
+    local table_IsEmpty = table.IsEmpty
+    local table_HasValue = table.HasValue
     function PLUGIN:KeyPress(client, key)
-        if ( client:GetCharacter() and client:Alive() ) then
-            if ( key == IN_USE ) then
+        if client:GetCharacter() and client:Alive() then
+            if key == IN_USE then
                 local HitPos = client:GetEyeTraceNoCursor()
                 local target = HitPos.Entity
                 if target and IsValid(target) and target:IsRagdoll() and self.list[target:GetModel()] then
                     local allowedWeapons = self.list[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
-                    local canButch = hook.Run('CanButchEntity', client, target)
-                    if ( table.HasValue(allowedWeapons, client:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and client:IsWepRaised() and canButch ) then
+                    local canButch = hook_Run('CanButchEntity', client, target)
+                    if ( table_HasValue(allowedWeapons, client:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and client:IsWepRaised() and canButch ) then
                         local butchAnim = self.list[target:GetModel()].animation or "Roofidle1"
                         local butchSound = self.list[target:GetModel()].slicingSound[1] or "ambient/machines/slicer1.wav"
                         client:ForceSequence(butchAnim, nil, 0)
@@ -125,7 +130,7 @@ if (SERVER) then
  
                         local physObj, butcheringTime = target:GetPhysicsObject(), self.list[target:GetModel()].butcheringTime or 2
                         if (IsValid(physObj) and !isnumber(self.list[target:GetModel()].butcheringTime) ) then
-                            butcheringTime = math.Round( physObj:GetMass() )
+                            butcheringTime = math_ceil( physObj:GetMass() )
                         end
 
                         client:SetAction("Butchering...", butcheringTime)
@@ -142,10 +147,10 @@ if (SERVER) then
                                         effect:SetStart(target:LocalToWorld(target:OBBCenter()))
                                         effect:SetOrigin(target:LocalToWorld(target:OBBCenter()))
                                         effect:SetScale(3)
-                                    util.Effect(self.list[target:GetModel()].impactEffect or "BloodImpact", effect)
+                                    util_Effect(self.list[target:GetModel()].impactEffect or "BloodImpact", effect)
 
                                     local butcheringItems = self.list[target:GetModel()].items or {}
-                                    if !table.IsEmpty(butcheringItems) then
+                                    if !table_IsEmpty(butcheringItems) then
                                         for _, item in ipairs(butcheringItems) do
                                             if !client:GetCharacter():GetInventory():Add(item) then
                                                 ix.item.Spawn(item, client)
@@ -154,7 +159,7 @@ if (SERVER) then
                                     end
 
                                     ix.log.Add(client, "playerButchered", target)
-                                    hook.Run('OnButchered', client, target)
+                                    hook_Run('OnButchered', client, target)
                                     target:Remove()
                                 end
                             end
