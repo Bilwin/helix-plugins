@@ -6,7 +6,7 @@ PLUGIN.schema = "Any"
 
 if !StormFox2 then return end
 PLUGIN.maps = { -- Custom SF2 options
-    ['rp_rg_city34_v1'] = {
+    ['rp_city34_v1a'] = {
         ['sf_extra_lightsupport'] = -1,
         ['sf_random_round_weather'] = 0,
         ['sf_maplight_max'] = 55,
@@ -20,21 +20,22 @@ PLUGIN.maps = { -- Custom SF2 options
 }
 
 if (SERVER) then
+    local RCC = RunConsoleCommand
     function PLUGIN:InitPostEntity()
-        RunConsoleCommand("sf_time_speed", 1)
-        RunConsoleCommand("sf_addnight_temp", 4)
+        RCC("sf_time_speed", 1)
+        RCC("sf_addnight_temp", 4)
 
         if self.maps[game.GetMap()] then
             for command, value in pairs( self.maps[game.GetMap()] ) do
-                RunConsoleCommand(command, value)
+                RCC(command, value)
             end
         end
 
-        RunConsoleCommand("sf_windmove_props", 0)
-        RunConsoleCommand("sf_windmove_props_break", 0)
-        RunConsoleCommand("sf_windmove_props_unfreeze", 0)
-        RunConsoleCommand("sf_windmove_props_unweld", 0)
-        RunConsoleCommand("sf_windmove_props_makedebris", 0)
+        RCC("sf_windmove_props", 0)
+        RCC("sf_windmove_props_break", 0)
+        RCC("sf_windmove_props_unfreeze", 0)
+        RCC("sf_windmove_props_unweld", 0)
+        RCC("sf_windmove_props_makedebris", 0)
     end
 
     hook.Add("StormFox2.InitPostEntity", "stormfox:StormFox2.InitPostEntity", function()
