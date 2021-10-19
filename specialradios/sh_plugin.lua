@@ -5,8 +5,8 @@ PLUGIN.author = "Bilwin"
 PLUGIN.schema = "HL2 RP"
 
 ix.specialRadios = ix.specialRadios or {factionsData = {}}
-ix.util.Include("sh_commands.lua", "shared")
-ix.util.Include("sv_hooks.lua", "server")
+ix.util.Include("sh_commands.lua")
+ix.util.Include("sv_hooks.lua")
 
 SCHANNEL_NONE = "none"
 
