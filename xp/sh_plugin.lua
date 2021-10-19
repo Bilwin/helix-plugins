@@ -33,15 +33,13 @@ PLUGIN.readme = [[
     The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
 ]]
 
-do
-    ix.char.RegisterVar("XP", {
-        field = "XP",
-        fieldType = ix.type.number,
-        isLocal = true,
-        bNoDisplay = true,
-        default = 0
-    })
-end
+ix.char.RegisterVar("XP", {
+    field = "XP",
+    fieldType = ix.type.number,
+    isLocal = true,
+    bNoDisplay = true,
+    default = 0
+})
 
 ix.XPSystem = {}
 ix.XPSystem.whitelists = {
