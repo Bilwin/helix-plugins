@@ -3,7 +3,6 @@ local PLUGIN = PLUGIN
 local _tonumber = tonumber
 local _math_ceil = math.ceil
 local _SoundDuration = SoundDuration
-local _Ambients_Cooldown = 10
 local util_PrecacheSound = util.PrecacheSound
 
 PLUGIN.name = "Ambient Music"
@@ -84,7 +83,7 @@ if CLIENT then
                     radio:Play()
                     self.ambient = radio
 
-                    m_flAmbientCooldown = os.time() + _tonumber(mSongDuration) + _Ambients_Cooldown
+                    m_flAmbientCooldown = os.time() + _tonumber(mSongDuration) + 10
                 end
             end)
         end
