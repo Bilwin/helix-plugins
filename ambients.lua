@@ -4,6 +4,7 @@ local _tonumber = tonumber
 local _math_ceil = math.ceil
 local _SoundDuration = SoundDuration
 local _Ambients_Cooldown = 10
+local util_PrecacheSound = util.PrecacheSound
 
 PLUGIN.name = "Ambient Music"
 PLUGIN.description = "Adds background music"
@@ -28,14 +29,20 @@ ix.lang.AddTable("russian", {
     optAmbientVolume = "Громкость фоновой музыки"
 })
 
-if (CLIENT) then
+if CLIENT then
+    if !table.IsEmpty(PLUGIN.songs) then
+        for _, data in ipairs(PLUGIN.songs) do
+            util_PrecacheSound(data.path)
+        end
+    end
+
     m_flAmbientCooldown = m_flAmbientCooldown or 0
     bAmbientPreSaver = bAmbientPreSaver or false
 
     ix.option.Add("enableAmbient", ix.type.bool, true, {
 		category = PLUGIN.name,
         OnChanged = function(oldValue, value)
-            if (value) then
+            if value then
                 if IsValid(PLUGIN.ambient) then
                     local volume = ix.option.Get("ambientVolume", 1)
                     PLUGIN.ambient:SetVolume(volume)
@@ -59,14 +66,6 @@ if (CLIENT) then
             end
         end
 	})
-
-    do
-        if !table.IsEmpty(PLUGIN.songs) then
-            for _, data in ipairs(PLUGIN.songs) do
-                util.PrecacheSound(data.path)
-            end
-        end
-    end
 
     function PLUGIN:CreateAmbient()
         local bEnabled = ix.option.Get('enableAmbient', true)
