@@ -4,7 +4,7 @@ PLUGIN.name = "Advanced Medical System"
 PLUGIN.description = "Introduction of heavy medicine and new features"
 PLUGIN.author = "Bilwin"
 PLUGIN.schema = "Any"
-PLUGIN.version = 1.0
+PLUGIN.version = 'Need to rework'
 PLUGIN.license = [[
     This is free and unencumbered software released into the public domain.
     Anyone is free to copy, modify, publish, use, compile, sell, or
