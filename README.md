@@ -1,4 +1,3 @@
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K568FWX)
 <br>
 [![GitHub Issues](https://img.shields.io/github/issues-raw/Bilwin/helix-plugins.svg)](https://github.com/Bilwin/helix-plugins/issues)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/Bilwin/helix-plugins)](https://github.com/Bilwin/helix-plugins/graphs/commit-activity)
