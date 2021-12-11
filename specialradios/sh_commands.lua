@@ -1,34 +1,47 @@
 
 local PLUGIN = PLUGIN
 
-do
-	local CLASS = {}
-	CLASS.color = Color(99, 166, 228)
-	CLASS.format = "[%s] %s: \"%s\""
-
-	function CLASS:CanHear(speaker, listener)
-        local character = listener:GetCharacter()
-        local specialChannel = speaker:GetCharacter():GetSpecialChannel()
-        if specialChannel == SCHANNEL_NONE then return false end
-        local bStatus = false
-
-        if (character:HasAccessToChannel(specialChannel) and (character:GetSpecialChannel() == specialChannel)) then
-            bStatus = true
+function PLUGIN:InitializedChatClasses()
+	ix.chat.Register("specialradio", {
+        color = Color(99, 166, 228),
+        format = "[%s] %s: \"%s\"",
+        CanHear = function(self, speaker, listener)
+            local character = listener:GetCharacter()
+            local specialChannel = speaker:GetCharacter():GetSpecialChannel()
+            if specialChannel == SCHANNEL_NONE then return false end
+            local bStatus = false
+    
+            if (character:HasAccessToChannel(specialChannel) and (character:GetSpecialChannel() == specialChannel)) then
+                bStatus = true
+            end
+    
+            return bStatus
+        end,
+        OnChatAdd = function(self, speaker, text)
+            text = speaker:IsCombine() and string.format("<:: %s ::>", text) or text
+            local channel = speaker:GetSpecialChannel() ~= SCHANNEL_NONE and (speaker:GetSpecialChannel()):upper() or 'UNKNOWN'
+            chat.AddText(self.color, string.format(self.format, channel, speaker:Name(), text))
         end
+    })
 
-		return bStatus
-	end
+    ix.command.Add("SpecialRadio", {
+        alias = "SR",
+        arguments = {ix.type.text},
+        OnRun = function(self, client, text)
+            local character = client:GetCharacter()
+            if !character then return end
+            if character:GetSpecialChannel() == SCHANNEL_NONE then return end
 
-	function CLASS:OnChatAdd(speaker, text)
-		text = speaker:IsCombine() and string.format("<:: %s ::>", text) or text
-        local channel = speaker:GetSpecialChannel() ~= SCHANNEL_NONE and (speaker:GetSpecialChannel()):upper() or 'UNKNOWN'
-		chat.AddText(self.color, string.format(self.format, channel, speaker:Name(), text))
-	end
+            if (!client:IsRestricted()) then
+                if !ix.config.Get("enableSpecialRadios", true) then return "@notNow" end
+                ix.chat.Send(client, "specialradio", text)
+            else
+                return "@notNow"
+            end
+        end,
+        bNoIndicator = true
+    })
 
-	ix.chat.Register("specialradio", CLASS)
-end
-
-do
     ix.command.Add("SetChannel", {
         description = "Set yourself a special channel.",
         alias = "SC",
@@ -47,26 +60,6 @@ do
                 end
             else
                 return "There is no such channel!"
-            end
-        end,
-        bNoIndicator = true
-    })
-end
-
-do
-    ix.command.Add("SpecialRadio", {
-        alias = "SR",
-        arguments = {ix.type.text},
-        OnRun = function(self, client, text)
-            local character = client:GetCharacter()
-            if !character then return end
-            if character:GetSpecialChannel() == SCHANNEL_NONE then return end
-
-            if (!client:IsRestricted()) then
-                if !ix.config.Get("enableSpecialRadios", true) then return "@notNow" end
-                ix.chat.Send(client, "specialradio", text)
-            else
-                return "@notNow"
             end
         end,
         bNoIndicator = true
