@@ -9,7 +9,7 @@ if SERVER then
     function PLUGIN:EntityTakeDamage(client, dmg)
         if IsValid(client) and client:IsPlayer() then
             if dmg:IsDamageType(DMG_CRUSH) and !IsValid(client.ixRagdoll) then
-                dmg:ScaleDamage(0)
+                return true
             end
         end
     end
