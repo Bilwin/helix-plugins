@@ -6,7 +6,7 @@ function PLUGIN:DoPlayerDeath(client, attacker, damageinfo)
 	for _, v in next, character:GetInventory():GetItems() do
 		if v:GetData('equip', false) && ((isfunction(v.bKeepOnDeath) && v:KeepOnDeath(client) || v.bKeepOnDeath) == true) then return end
 
-		if v.base == 'base_newoutfit' && v:GetData('equip', false) == true then
+		if v.base == 'base_extendedoutfits' && v:GetData('equip', false) == true then
 			v.player = client
 			v.functions.EquipUn.OnRun(v)
 			v.player = nil
@@ -22,7 +22,7 @@ function PLUGIN:PostPlayerDeath(client)
 	for _, v in next, inventory:GetItems() do
 		if v:GetData('equip', false) && ((isfunction(v.bKeepOnDeath) && v:bKeepOnDeath(client) || v.bKeepOnDeath) == true) then return end
 
-		if v.base == "base_newoutfit" && v:GetData("equip") == true then
+		if v.base == "base_extendedoutfits" && v:GetData("equip") == true then
 			if v.bodyGroups then
 				if v.bodyGroups[1] then
 					local bodygroupID = client:FindBodygroupByName(v.bodyGroups[1])

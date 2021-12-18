@@ -207,7 +207,7 @@ end
 
 function ITEM:CanEquipOutfit()
 	if (self.maxArmor) then
-		local outfits = self.player:GetCharacter():GetInventory():GetItemsByBase('base_newoutfit', true)
+		local outfits = self.player:GetCharacter():GetInventory():GetItemsByBase('base_extendedoutfits', true)
 		for _, v in next, outfits do
 			if (v:GetData('equip') && v.maxArmor) then
 				return false
