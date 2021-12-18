@@ -8,6 +8,12 @@ function ENTITY:GetMass()
     end
 end
 
+function rnlib.OverrideEntStored(class_name, key, value)
+    assert(class_name != nil, 'class_name should be entity class name!')
+    local stored = scripted_ents.GetStored(class_name)['t']
+    stored[key] = value
+end
+
 if SERVER then
     function ENTITY:SafeRemoveFaded(t)
         if !IsValid(self) then return end
