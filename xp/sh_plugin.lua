@@ -4,12 +4,30 @@ PLUGIN.name = "XP System"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "Adds XP whitelisted system"
 PLUGIN.schema = "Any"
-PLUGIN.version = 1.02
+PLUGIN.version = 1.03
 PLUGIN.readme = [[
     This plugin adds the XP system to the server, if it is enabled.
     If used correctly, you can make it so that you need to have some XP to select a class.
     The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
 ]]
+PLUGIN.whitelists = {
+    --[FACTION_CITIZEN] = {
+    --    [CLASS_CITIZEN] = 0,
+    --    [CLASS_CWU]     = 5
+    --},
+    --[FACTION_MPF] = {
+    --    [CLASS_MPR]     = 50,
+    --    [CLASS_MPU]     = 75,
+    --    [CLASS_EMP]     = 100
+    --},
+    --[FACTION_OTA] = {
+    --    [CLASS_OWS]     = 200,
+    --    [CLASS_EOW]     = 300
+    --},
+    --[FACTION_ADMIN] = {
+    --    [CLASS_ADMIN]   = 600
+    --}
+}
 
 ix.util.Include("sv_hooks.lua")
 
@@ -41,23 +59,3 @@ ix.config.Add("maxXPgain", 5, "Points awarded when playing on the server", nil, 
 ix.config.Add("XPgainEnabled", true, "Will the XP auto-give system be enabled?.", nil, {
 	category = PLUGIN.name
 })
-
-ix.XPSystem = {}
-ix.XPSystem.whitelists = {
-    --[FACTION_CITIZEN] = {
-    --    [CLASS_CITIZEN] = 0,
-    --    [CLASS_CWU]     = 5
-    --},
-    --[FACTION_MPF] = {
-    --    [CLASS_MPR]     = 50,
-    --    [CLASS_MPU]     = 75,
-    --    [CLASS_EMP]     = 100
-    --},
-    --[FACTION_OTA] = {
-    --    [CLASS_OWS]     = 200,
-    --    [CLASS_EOW]     = 300
-    --},
-    --[FACTION_ADMIN] = {
-    --    [CLASS_ADMIN]   = 600
-    --}
-}
