@@ -10,14 +10,6 @@ function ix.specialRadios:RegisterFaction(faction, channels)
     self.factionsData[faction] = channels
 end
 
-function PLUGIN:InitFactions()
-    for index, data in ipairs(ix.faction.indices) do
-        if data.radioChannels and istable(data.radioChannels) then
-            ix.specialRadios:RegisterFaction(index, data.radioChannels)
-        end
-    end
-end
-
 function ix.meta.character:HasAccessToChannel(channelName)
     if ix.specialRadios[channelName] then
         if !istable(ix.specialRadios.factionsData[self:GetFaction()]) then return false end

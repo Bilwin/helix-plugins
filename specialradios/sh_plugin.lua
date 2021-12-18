@@ -27,7 +27,12 @@ ix.config.Add("enableSpecialRadios", true, "Whether or no we need to enable spec
 
 function PLUGIN:InitializedPlugins()
     if SERVER then
-        self:InitFactions()
+        for index, data in ipairs(ix.faction.indices) do
+            if data.radioChannels and istable(data.radioChannels) then
+                ix.specialRadios:RegisterFaction(index, data.radioChannels)
+            end
+        end
+
         ix.specialRadios:RegisterChannel("cmb")
         ix.specialRadios:RegisterChannel("tac3")
         ix.specialRadios:RegisterChannel("tac5")
