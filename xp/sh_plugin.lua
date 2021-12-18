@@ -5,11 +5,6 @@ PLUGIN.author = "Bilwin"
 PLUGIN.description = "Adds XP whitelisted system"
 PLUGIN.schema = "Any"
 PLUGIN.version = 1.03
-PLUGIN.readme = [[
-    This plugin adds the XP system to the server, if it is enabled.
-    If used correctly, you can make it so that you need to have some XP to select a class.
-    The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
-]]
 PLUGIN.whitelists = {
     --[FACTION_CITIZEN] = {
     --    [CLASS_CITIZEN] = 0,
