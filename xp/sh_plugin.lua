@@ -3,35 +3,15 @@ local PLUGIN = PLUGIN
 PLUGIN.name = "XP System"
 PLUGIN.author = "Bilwin"
 PLUGIN.description = "Adds XP whitelisted system"
-PLUGIN.schema = "any"
-PLUGIN.version = 1.0.1
-PLUGIN.license = [[
-    This is free and unencumbered software released into the public domain.
-    Anyone is free to copy, modify, publish, use, compile, sell, or
-    distribute this software, either in source code form or as a compiled
-    binary, for any purpose, commercial or non-commercial, and by any
-    means.
-    In jurisdictions that recognize copyright laws, the author or authors
-    of this software dedicate any and all copyright interest in the
-    software to the public domain. We make this dedication for the benefit
-    of the public at large and to the detriment of our heirs and
-    successors. We intend this dedication to be an overt act of
-    relinquishment in perpetuity of all present and future rights to this
-    software under copyright law.
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-    OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-    ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-    OTHER DEALINGS IN THE SOFTWARE.
-    For more information, please refer to <http://unlicense.org/>
-]]
+PLUGIN.schema = "Any"
+PLUGIN.version = 1.02
 PLUGIN.readme = [[
     This plugin adds the XP system to the server, if it is enabled.
     If used correctly, you can make it so that you need to have some XP to select a class.
     The table ix.XPSystem.whitelists contains fractions and classes for it, and XP need (Classes are necessary!)
 ]]
+
+ix.util.Include("sv_hooks.lua")
 
 ix.char.RegisterVar("XP", {
     field = "XP",
@@ -39,6 +19,27 @@ ix.char.RegisterVar("XP", {
     isLocal = true,
     bNoDisplay = true,
     default = 0
+})
+
+ix.lang.AddTable("english", {
+	xpGainTime = "You got %s XP!",
+    xpAborted = "Your XP has been reset!",
+    xpSet = "Your XP was set on %s"
+})
+
+ix.lang.AddTable("russian", {
+	xpGainTime = "Вы получили %s XP!",
+    xpAborted = "Ваши XP были обнулены!",
+    xpSet = "Ваш XP был установлен на %s"
+})
+
+ix.config.Add("maxXPgain", 5, "Points awarded when playing on the server", nil, {
+	data = {min = 0, max = 50},
+	category = PLUGIN.name
+})
+
+ix.config.Add("XPgainEnabled", true, "Will the XP auto-give system be enabled?.", nil, {
+	category = PLUGIN.name
 })
 
 ix.XPSystem = {}
@@ -60,7 +61,3 @@ ix.XPSystem.whitelists = {
     --    [CLASS_ADMIN]   = 600
     --}
 }
-
-ix.util.Include("sh_config.lua")
-ix.util.Include("sv_hooks.lua")
-ix.util.Include("sh_language.lua")
