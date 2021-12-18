@@ -2,8 +2,11 @@
 local PLUGIN = PLUGIN
 PLUGIN.name = 'Christmas'
 PLUGIN.author = 'Bilwin'
+
+-- for better experience
 -- https://steamcommunity.com/sharedfiles/filedetails/?id=1596556401
--- :D
+-- https://github.com/Bilwin/helix-plugins/blob/main/fog.lua
+
 if CLIENT then
     PLUGIN.Breathtextures = PLUGIN.Breathtextures || {
         ( Material("particle/smokesprites_0001") ),
