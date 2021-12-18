@@ -2,7 +2,8 @@
 local PLUGIN = PLUGIN
 PLUGIN.name = 'Christmas'
 PLUGIN.author = 'Bilwin'
-
+-- https://steamcommunity.com/sharedfiles/filedetails/?id=1596556401
+-- :D
 if CLIENT then
     PLUGIN.Breathtextures = PLUGIN.Breathtextures || {
         ( Material("particle/smokesprites_0001") ),
