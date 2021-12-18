@@ -1,5 +1,4 @@
 
-
 ITEM.name = 'Extended Outfit'
 ITEM.description = 'A generic piece of clothing.'
 ITEM.model = Model('models/props_c17/BriefCase001a.mdl')
