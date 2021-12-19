@@ -202,7 +202,7 @@ if (SERVER) then
 									goto calculation
 								end
 
-								return false, '@CraftStackItems'
+								return false, 'You need to collect the materials used in one stack'
 							else
 								itemTable:Remove()
 							end
