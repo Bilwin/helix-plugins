@@ -145,16 +145,3 @@ function draw.SteamAvatar(avatar, res, x, y, width, height, color, ang, corner)
 		draw.WebImage(url, x, y, width, height, color, ang, corner)
 	end)
 end
-
-function sound.PlayURL(url, flags, cb)
-	local snd = fetch_asset(url)
-
-	if (snd) then
-		sound_PlayFile(snd, flags, cb)
-	else
-		sound.oPlayURL(url, flags, function(snd, err, _)
-			if (IsValid(snd) and snd:GetLength() < 30) then write_sound(crc(url), url) end
-			cb(snd, err, _)
-		end)
-	end
-end
