@@ -1,14 +1,14 @@
 
-ITEM.name = "Stackable Items Base"
-ITEM.description = "Stackable Item"
-ITEM.category = "Stackable"
-ITEM.model = Model('models/props_c17/TrapPropeller_Lever.mdl')
+ITEM.name = 'Stackable Items Base'
+ITEM.description = 'Stackable Item'
+ITEM.category = 'Stackable'
+ITEM.model = 'models/props_c17/TrapPropeller_Lever.mdl'
 ITEM.maxStacks = 16
 
-if (CLIENT) then
+if CLIENT then
 	function ITEM:PaintOver(item, w, h)
 		draw.SimpleText(
-			item:GetData("stacks", 1), "DermaDefault", w - 5, h - 5,
+			item:GetData('stacks', 1), 'DermaDefault', w - 5, h - 5,
 			color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM, 1, color_black
 		)
 	end
@@ -24,7 +24,7 @@ ITEM.functions.combine = {
         if (firstItem.uniqueID ~= secondItem.uniqueID) then return false end
         if (totalStacks > firstItem.maxStacks) then return false end
 
-		firstItem:SetData("stacks", totalStacks, ix.inventory.Get(firstItem.invID):GetReceivers())
+		firstItem:SetData('stacks', totalStacks, ix.inventory.Get(firstItem.invID):GetReceivers())
 		secondItem:Remove()
 
 		return false
