@@ -11,8 +11,7 @@ ITEM.functions.Apply = {
 	icon = "icon16/heart.png",
 	sound = "items/medshot4.wav",
 	OnRun = function(itemTable)
-		local client = itemTable.player
-		PLUGIN:SetBleeding(client, false)
+		PLUGIN:SetBleeding(itemTable.player, false)
 	end
 }
 

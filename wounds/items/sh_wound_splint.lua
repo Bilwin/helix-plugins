@@ -11,7 +11,7 @@ ITEM.functions.Apply = {
 	icon = "icon16/heart.png",
 	sound = "items/medshot4.wav",
 	OnRun = function(itemTable)
-		PLUGIN:SetFracture(client, false)
+		PLUGIN:SetFracture(itemTable.player, false)
 	end
 }
 
