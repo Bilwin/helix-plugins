@@ -1,8 +1,15 @@
 
 local PLUGIN = PLUGIN
 PLUGIN.name = "Detailed Descriptions"
-PLUGIN.author = "Bilwin"
+PLUGIN.author = "Bilwin & Zoephix"
 PLUGIN.description = "Adds the ability for players to create detailed descriptions, which can be examined."
+PLUGIN.license = [[ 
+This script is part of the "Detailed Descriptions" plugin by Zoephix.
+© Copyright 2020: Zoephix.
+You are allowed to use, modify and redistribute this script.
+However, you are not allowed to sell this script nor profit from this script in any way.
+You are not allowed to claim this script as being your own work, do not remove the credits. ]]
+
 ix.util.Include("cl_plugin.lua")
 ix.util.Include("sv_plugin.lua")
 
