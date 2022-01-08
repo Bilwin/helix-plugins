@@ -48,7 +48,7 @@ function PANEL:Init()
 
 	self.description = self.panel:Add("DLabel")
 	self.description:Dock(FILL)
-	self.description:SetText("----")
+	self.description:SetText("Я рекрутёр Гражданской Обороны. Чтобы вступить в ряды Г.О. тебе нужно (WIP)[БЫТЬ ЛОЯЛИСТОМ 2ГО УРОВНЯ] \nЖелаешь вступить в наши ряды? ")
 	self.description:SetTextColor(color_white)
 	self.description:SetFont("ixMediumFont")
 	self.description:SetWrap(true)
