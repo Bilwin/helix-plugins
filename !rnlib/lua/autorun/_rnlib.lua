@@ -11,9 +11,11 @@ local format = Format
 -- Optimised for helix framework
 -- I mean without protect and most of crypto modules
 _G._R = debug.getregistry()
-_G.rnlib = _G.rnlib || {version = 1.0, authors = {'Bilwin'}, debug = cvars.Bool('developer', false)}
+_G.rnlib = _G.rnlib || {version = 1.21, authors = {'Bilwin'}, debug = cvars.Bool('developer', false), util = {}}
 _G.PLAYER, _G.ENTITY = FindMetaTable 'Player', FindMetaTable 'Entity'
 _G._player, _G._file = player, file
+FindMetaTable('Entity').IsDoor = function(self) return self:GetClass():find('door') != nil end
+FindMetaTable('Entity').GetBlocker = function(self) return self:GetSaveTable()['pBlocker'] end
 
 function rnlib.i(path, side)
     if string_find(path, 'sv_') || side == 'server' then
@@ -207,6 +209,11 @@ function rnlib.LoadINI(fileName, bFromGame, bStripQuotes)
 	end
 end
 
+function rnlib.StripRealmPrefix(name)
+	local prefix = name:sub(1, 3)
+	return (prefix == "sh_" || prefix == "sv_" || prefix == "cl_") && name:sub(4) || name
+end
+
 if SERVER then
 	function rnlib.IsFamilyShared(client)
 		return client:SteamID64() != client:OwnerSteamID64()
@@ -216,7 +223,7 @@ if SERVER then
 		return self:SteamID64() != self:OwnerSteamID64()
 	end
 
-	function rnlib.FixAreaportals(ent)
+	hook.Add('EntityRemoved', 'rnlib.AreaPortalsFix', function(ent)
 		if IsValid(ent) && ent:IsDoor() then
 			local name = ent:GetName()
 			if name != '' then
@@ -230,10 +237,6 @@ if SERVER then
 				end
 			end
 		end
-	end
-
-	hook.Add('EntityRemoved', 'rnlib.AreaPortalsFix', function(ent)
-		rnlib.FixAreaportals(ent)
 	end)
 end
 

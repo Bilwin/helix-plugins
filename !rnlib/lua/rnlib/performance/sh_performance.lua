@@ -1,13 +1,3 @@
-
-hook.Add('InitPostEntity', 'rnlib.performance', function()
-    local physData 	= physenv.GetPerformanceSettings()
-        physData.MaxVelocity 						= 1000
-        physData.MaxCollisionChecksPerTimestep		= 10000
-        physData.MaxCollisionsPerObjectPerTimestep 	= 2
-        physData.MaxAngularVelocity					= 3636
-	physenv.SetPerformanceSettings(physData)
-end)
-
 if SERVER then
     hook.Add('PlayerInitialSpawn', 'rnlib.performance', function(client)
         netstream.Start(client, 'rnlib.performance')
@@ -24,7 +14,6 @@ if CLIENT then
         ['r_threaded_client_shadow_manager'] = 1,
         ['r_threaded_particles'] = 1,
         ['r_threaded_renderables'] = 1,
-        ['mat_fastspecular'] = 0,
         ['studio_queue_mode'] = 1,
 
         -- network
@@ -36,7 +25,7 @@ if CLIENT then
     netstream.Hook('rnlib.performance', function()
         for c, v in pairs(cmds) do
             RunConsoleCommand(c, v)
-            rnlib.p('PERF > "%s" value changed to "%s"', c, v)
+            rnlib.p('PERFORMANCE > "%s" value changed to "%s"', c, v)
         end
 
         hook.Remove("RenderScreenspaceEffects", "RenderColorModify")
