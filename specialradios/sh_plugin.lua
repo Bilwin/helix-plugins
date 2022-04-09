@@ -10,7 +10,8 @@ ix.specialRadios = ix.specialRadios or {factionsData = {}}
 ix.util.Include("sh_commands.lua")
 ix.util.Include("sv_hooks.lua")
 
-function FindMetaTable("Player"):GetSpecialChannel()
+local PLAYER = FindMetaTable("Player")
+function PLAYER:GetSpecialChannel()
     return self:GetCharacter():GetSpecialChannel() or SCHANNEL_NONE
 end
 
