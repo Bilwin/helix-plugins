@@ -152,7 +152,7 @@ if (SERVER) then
             return
         end
 
-        local has_cid, cidTable = client:GetCharacter():IsPrimaryCardValid()
+        local cid = client:GetCharacter():GetInventory():HasItem("cid")
 
         if client:IsCombine() then
             self:SetLocked(!self:GetLocked())
@@ -160,14 +160,14 @@ if (SERVER) then
             return
         end
 
-        if (!has_cid) then
+        if (!cid) then
             self:DisplayError()
             self.nextUseTime = CurTime() + 2
     
             return
         end
 
-        if ( !self:AlreadyOwned(cidTable:GetCID()) ) then
+        if ( !self:AlreadyOwned(cid:GetData("id")) ) then
             self:DisplayError()
             self.nextUseTime = CurTime() + 2
     
