@@ -7,8 +7,8 @@ net.Receive("ixRadio", function(_, pl)
     	if !IsValid(radio) and !IsEntity(radio) then return end
     	if radio:GetClass() ~= "ix_radio" then return end
 
-	if radio:GetPos():DistToSqr( pl:GetPos() ) > 50000 then return end
-	radio:SelectSong( songPath )
+	    if radio:GetPos():DistToSqr( pl:GetPos() ) > 50000 then return end
+	    radio:SelectSong( songPath )
 end)
 
 function PLUGIN:SaveData()
