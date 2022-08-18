@@ -79,7 +79,7 @@ if SERVER then
 
             net.Start('ixClearClientRagdolls')
                 net.WriteString(npc:GetModel())
-            net.SendPAS( npc:GetPos() )
+            net.SendPVS( npc:GetPos() )
         end
 	end
 
