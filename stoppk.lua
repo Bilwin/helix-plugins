@@ -1,16 +1,10 @@
-
-local PLUGIN = PLUGIN
-PLUGIN.name = "Prop-Kill blocker"
-PLUGIN.author = "Bilwin"
-PLUGIN.schema = "Any"
-PLUGIN.version = 1.0
+PLUGIN.name     = 'Prop-Kill blocker'
+PLUGIN.author   = 'Bilwin'
 
 if SERVER then
     function PLUGIN:EntityTakeDamage(client, dmg)
-        if IsValid(client) and client:IsPlayer() then
-            if dmg:IsDamageType(DMG_CRUSH) and !IsValid(client.ixRagdoll) then
-                return true
-            end
+        if IsValid(client) && client:IsPlayer() && dmg:IsDamageType(DMG_CRUSH) && not IsValid(client.ixRagdoll) then
+            return true
         end
     end
 end

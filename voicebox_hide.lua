@@ -1,7 +1,5 @@
-
-local PLUGIN = PLUGIN
-PLUGIN.name = 'VoiceBox Remover'
-PLUGIN.author = 'Bilwin'
+PLUGIN.name     = 'VoiceBox Remover'
+PLUGIN.author   = 'Bilwin'
 
 if CLIENT then
     function PLUGIN:PlayerStartVoice()

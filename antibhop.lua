@@ -1,7 +1,5 @@
-
-PLUGIN.name = "Anti-Bhop"
-PLUGIN.author = "Bilwin"
-PLUGIN.schema = "Any"
+PLUGIN.name     = 'Anti-Bhop'
+PLUGIN.author   = 'Bilwin'
 
 function PLUGIN:OnPlayerHitGround(client)
     local vel = client:GetVelocity()

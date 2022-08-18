@@ -1,6 +1,5 @@
-
-PLUGIN.name = "Third-person blocker"
-PLUGIN.author = "Bilwin"
+PLUGIN.name 	= 'Third-person Damage blocker'
+PLUGIN.author 	= 'Bilwin'
 
 if CLIENT then
     gameevent.Listen('player_hurt')

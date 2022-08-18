@@ -1,7 +1,5 @@
-
-local PLUGIN = PLUGIN
-PLUGIN.name = 'Equipped Items Drop'
-PLUGIN.author = 'Bilwin'
+PLUGIN.name     = 'Equipped Items Drop'
+PLUGIN.author   = 'Bilwin'
 
 if SERVER then
     function PLUGIN:PostPlayerDeath(client)

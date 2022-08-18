@@ -1,55 +1,67 @@
+PLUGIN.name 	= 'Adds /Apply command'
+PLUGIN.author 	= 'Bilwin'
 
-PLUGIN.name = "Adds /Apply command"
-PLUGIN.author = "Bilwin"
-PLUGIN.schema = "Any"
-PLUGIN.version = 1.0
+ix.command.Add('Apply', {
+    description = 'Introduce yourself',
+    OnRun = function(_, client)
+        if not client:GetCharacter() then return end
+        local cid = client:GetCharacter():GetInventory():HasItem('cid')
 
-if (SERVER) then
+        if cid then
+            ix.chat.Send(client, 'ic', cid:GetData('name', 'N/A') .. ', #' .. cid:GetData('id', 'N/A'))
+        else
+            ix.chat.Send(client, 'ic', client:GetCharacter():GetName())
+        end
+
+        hook.Run('RecognizeCharacter', client)
+    end
+})
+
+if SERVER then
     function PLUGIN:Recognize(client, level)
-		if (isnumber(level)) then
-			local targets = {}
+		if type(level) ~= 'number' then return end
+		local targets = {}
 
-			if (level < 1) then
-				local entity = client:GetEyeTraceNoCursor().Entity
+		if level < 1 then
+			local entity = client:GetEyeTraceNoCursor().Entity
 
-				if (IsValid(entity) and entity:IsPlayer() and entity:GetCharacter()
-				and ix.chat.classes.ic:CanHear(client, entity)) then
-					targets[1] = entity
+			if (IsValid(entity) && entity:IsPlayer() && entity:GetCharacter()
+			&& ix.chat.classes.ic:CanHear(client, entity)) then
+				targets[1] = entity
+			end
+		else
+			local class = 'w'
+
+			if level == 2 then
+				class = 'ic'
+			elseif level == 3 then
+				class = 'y'
+			end
+
+			class = ix.chat.classes[class]
+
+			for _, v in ipairs(player.GetAll()) do
+				if client ~= v && v:GetCharacter() && class:CanHear(client, v) then
+					targets[#targets + 1] = v
 				end
-			else
-				local class = "w"
+			end
+		end
 
-				if (level == 2) then
-					class = "ic"
-				elseif (level == 3) then
-					class = "y"
-				end
+		if #targets > 0 then
+			local id = client:GetCharacter():GetID()
+			local i = 0
 
-				class = ix.chat.classes[class]
-
-				for _, v in ipairs(player.GetAll()) do
-					if (client != v and v:GetCharacter() and class:CanHear(client, v)) then
-						targets[#targets + 1] = v
-					end
+			for _, v in ipairs(targets) do
+				if v:GetCharacter():Recognize(id) then
+					i = i + 1
 				end
 			end
 
-			if (#targets > 0) then
-				local id = client:GetCharacter():GetID()
-				local i = 0
+			if i > 0 then
+				net.Start('ixRecognizeDone')
+				net.Send(client)
 
-				for _, v in ipairs(targets) do
-					if (v:GetCharacter():Recognize(id)) then
-						i = i + 1
-					end
-				end
-
-				if (i > 0) then
-					net.Start("ixRecognizeDone")
-					net.Send(client)
-
-					hook.Run("CharacterRecognized", client, id)
-				end
+				hook.Run('CharacterRecognized', client, id)
 			end
 		end
     end
@@ -58,18 +70,3 @@ if (SERVER) then
         return self:Recognize(client, 2)
     end
 end
-
-ix.command.Add("Apply", {
-    description = "Introduce yourself",
-    OnRun = function(self, client)
-        if !client:GetCharacter() then return end
-        local cid = client:GetCharacter():GetInventory():HasItem("cid")
-        if (cid) then
-            ix.chat.Send(client, 'ic', cid:GetData("name", "N/A") .. ", #" .. cid:GetData("id", "N/A"))
-        else
-            ix.chat.Send(client, 'ic', client:GetCharacter():GetName())
-        end
-
-        hook.Run("RecognizeCharacter", client)
-    end
-})

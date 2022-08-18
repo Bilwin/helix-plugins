@@ -5,7 +5,7 @@ PLUGIN.author = 'Bilwin'
 
 -- for better experience
 -- https://steamcommunity.com/sharedfiles/filedetails/?id=1596556401
--- https://github.com/Bilwin/helix-plugins/blob/main/fog.lua
+-- https://github.com/Bilwin/helix-plugins/blob/main/.deprecated/fog.lua
 
 if CLIENT then
     PLUGIN.Breathtextures = PLUGIN.Breathtextures || {

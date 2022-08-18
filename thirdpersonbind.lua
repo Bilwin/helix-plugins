@@ -1,19 +1,15 @@
 
-PLUGIN.name = 'Third-person view bind'
-PLUGIN.description = 'Allows you toggle third-person view using bind'
-PLUGIN.author = 'Bilwin'
-PLUGIN.bind = KEY_P
+PLUGIN.name         = 'Third-person view bind'
+PLUGIN.description  = 'Allows you toggle third-person view using bind'
+PLUGIN.author       = 'Bilwin'
+PLUGIN.button       = KEY_P
 
-if (CLIENT) then
+if CLIENT then
     local Cooldown
-    function PLUGIN:PlayerButtonDown(me, button)
-        if button == self.bind then
-            if IsFirstTimePredicted() then
-                if (Cooldown or 0) < CurTime() then
-                    RunConsoleCommand("ix_togglethirdperson")
-                    Cooldown = CurTime() + 0.1
-                end
-            end
+    function PLUGIN:PlayerButtonDown(_, button)
+        if button == self.button && (Cooldown || 0) < CurTime() then
+            RunConsoleCommand('ix_togglethirdperson')
+            Cooldown = CurTime() + 0.1
         end
     end
 end

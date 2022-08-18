@@ -1,17 +1,14 @@
-
-PLUGIN.name = "Corpse Butchering"
-PLUGIN.author = "Bilwin"
-PLUGIN.schema = "Any"
-PLUGIN.version = 1.1
+PLUGIN.name     = 'Corpse Butchering'
+PLUGIN.author   = 'Bilwin'
 
 PLUGIN.list = {
     --[[
     ['modelpath/modelname.mdl'] = {
         butcheringTime = 5,                                                                     -- How many seconds will the corpse be butchered
-        impactEffect = "AntlionGib",                                                            -- What will be the effect when butchering a corpse
-        slicingSound = {[1] = "soundpath/soundname.***", [2] = "soundpath/soundname.***"},      -- [1] This is the initial butchering sound; [2] this is the sound at which the corpse will already be butchered
+        impactEffect = 'AntlionGib',                                                            -- What will be the effect when butchering a corpse
+        slicingSound = {[1] = 'soundpath/soundname.***', [2] = 'soundpath/soundname.***'},      -- [1] This is the initial butchering sound; [2] this is the sound at which the corpse will already be butchered
         butcheringWeapons = {'weapon_class', 'weapon_class2'},                                  -- Weapons available for butchering a specific corpse
-        animation = "Roofidle1",                                                                -- Animation that will be played when butchering
+        animation = 'Roofidle1',                                                                -- Animation that will be played when butchering
         items = {'item_uniqueID1', 'item_uniqueID2'}                                            -- Items to be issued for character after butchered
     }
     --]]
@@ -34,20 +31,20 @@ PLUGIN.list = {
     ['models/antlion.mdl'] = {
         impactEffect = 'AntlionGib',
         butcheringTime = 30,
-        slicingSound = {[1] = 'ambient/machines/slicer2.wav', [2] = 'ambient/machines/slicer3.wav'},
+        slicingSound = {'ambient/machines/slicer2.wav', 'ambient/machines/slicer3.wav'},
         items = {}
     }
 }
 
-if (SERVER) then
-    ix.log.AddType("playerButchered", function(client, corpse)
-        return string.format("%s was butchered %s.", client:Name(), corpse:GetModel())
+if SERVER then
+    ix.log.AddType('playerButchered', function(client, corpse)
+        return string.format('%s was butchered %s.', client:Name(), corpse:GetModel())
     end)
 
     util.AddNetworkString('ixClearClientRagdolls')
 	function PLUGIN:OnNPCKilled(npc, attacker, inflictor)
-        if IsValid(npc) and self.list[npc:GetModel()] then
-            local ragdoll = ents.Create("prop_ragdoll")
+        if IsValid(npc) && self.list[npc:GetModel()] then
+            local ragdoll = ents.Create('prop_ragdoll')
             ragdoll:SetPos( npc:GetPos() )
             ragdoll:SetAngles( npc:EyeAngles() )
             ragdoll:SetModel( npc:GetModel() )
@@ -82,7 +79,7 @@ if (SERVER) then
 
             net.Start('ixClearClientRagdolls')
                 net.WriteString(npc:GetModel())
-            net.Broadcast()
+            net.SendPAS( npc:GetPos() )
         end
 	end
 
@@ -100,8 +97,8 @@ if (SERVER) then
                     local allowedWeapons = self.list[target:GetModel()].butcheringWeapons or {'weapon_crowbar'}
                     local canButch = hook_Run('CanButchEntity', client, target)
                     if ( table_HasValue(allowedWeapons, client:GetActiveWeapon():GetClass()) and !target:GetNetVar('cutting', false) and client:IsWepRaised() and canButch ) then
-                        local butchAnim = self.list[target:GetModel()].animation or "Roofidle1"
-                        local butchSound = self.list[target:GetModel()].slicingSound[1] or "ambient/machines/slicer1.wav"
+                        local butchAnim = self.list[target:GetModel()].animation or 'Roofidle1'
+                        local butchSound = self.list[target:GetModel()].slicingSound[1] or 'ambient/machines/slicer1.wav'
                         client:ForceSequence(butchAnim, nil, 0)
                         target:SetNetVar('cutting', true)
                         target:EmitSound(butchSound)
@@ -111,21 +108,21 @@ if (SERVER) then
                             butcheringTime = math_ceil( physObj:GetMass() )
                         end
 
-                        client:SetAction("Butchering...", butcheringTime)
+                        client:SetAction('Butchering...', butcheringTime)
                         client:DoStaredAction(target, function()
                             if ( IsValid(client) ) then
                                 client:LeaveSequence()
 
                                 if IsValid(target) then
                                     target:SetNetVar('cutting', nil)
-                                    butchSound = self.list[target:GetModel()].slicingSound[2] or "ambient/machines/slicer4.wav"
+                                    butchSound = self.list[target:GetModel()].slicingSound[2] or 'ambient/machines/slicer4.wav'
                                     target:EmitSound(butchSound)
 
                                     local effect = EffectData()
                                         effect:SetStart(target:LocalToWorld(target:OBBCenter()))
                                         effect:SetOrigin(target:LocalToWorld(target:OBBCenter()))
                                         effect:SetScale(3)
-                                    util_Effect(self.list[target:GetModel()].impactEffect or "BloodImpact", effect)
+                                    util_Effect(self.list[target:GetModel()].impactEffect or 'BloodImpact', effect)
 
                                     local butcheringItems = self.list[target:GetModel()].items or {}
                                     if !table_IsEmpty(butcheringItems) then
@@ -136,7 +133,7 @@ if (SERVER) then
                                         end
                                     end
 
-                                    ix.log.Add(client, "playerButchered", target)
+                                    ix.log.Add(client, 'playerButchered', target)
                                     hook_Run('OnButchered', client, target)
                                     target:Remove()
                                 end
