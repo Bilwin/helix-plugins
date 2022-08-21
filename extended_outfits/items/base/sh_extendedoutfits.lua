@@ -46,6 +46,16 @@ function ITEM:RemoveOutfit(client)
 		end
 	end
 
+    	if (self.newSkin) then
+		local char = client:GetCharacter()
+		if (char:GetData("oldSkin" .. self.outfitCategory)) then
+			client:SetSkin(char:GetData("oldSkin" .. self.outfitCategory))
+			char:SetData("oldSkin" .. self.outfitCategory, nil)
+		else
+			client:SetSkin(0)
+		end
+	end
+    
 	client:EmitSound('npc/footsteps/softshoe_generic6.wav')
 end
 
@@ -124,7 +134,12 @@ ITEM.functions.Equip = {
 		end
 
 		item:SetData('equip', true)
-
+        
+		if (item.newSkin) then
+			char:SetData("oldSkin" .. item.outfitCategory, item.player:GetSkin())
+			item.player:SetSkin(item.newSkin)
+		end
+        
 		if (item.bodyGroups) then
 			for k, value in pairs(item.bodyGroups) do
 				local index = client:FindBodygroupByName(k)
