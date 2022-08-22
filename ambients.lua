@@ -28,7 +28,6 @@ if CLIENT then
     end
 
     m_iAmbientCooldown = m_iAmbientCooldown || 0
-    bAmbientPreSaver = bAmbientPreSaver || false
 
     ix.option.Add('enableAmbient', ix.type.bool, true, {
 		category = PLUGIN.name,
@@ -54,44 +53,50 @@ if CLIENT then
         end
 	})
 
+    local bLoaded = false
     function PLUGIN:CreateAmbient()
+        if bLoaded then return end
+    
         local bEnabled = ix.option.Get('enableAmbient', true)
+        if not bEnabled then return end
+    
+        local iVolume       = ix.option.Get('ambientVolume', 1)
+        local mSongTable    = self.songs[math.random(1, #self.songs)]
+        local mSongPath     = mSongTable.path
+        local mSongDuration = mSongTable.duration || SoundDuration(mSongPath)
 
-        if (bEnabled && not bAmbientPreSaver) then
-            local iVolume = ix.option.Get('ambientVolume', 1)
-            local mSongTable = self.songs[math.random(1, #self.songs)]
-            local mSongPath = mSongTable.path
-            local mSongDuration = mSongTable.duration || SoundDuration(mSongPath)
+        sound.PlayFile('sound/' .. mSongTable.path, 'noblock', function(mSongObj)
+            if not IsValid(mSongObj) then return end
 
-            sound.PlayFile('sound/' .. mSongTable.path, 'noblock', function(mSongObj)
-                if IsValid(mSongObj) then
-                    if IsValid(self.ambient) then self.ambient:Stop() end
+            if IsValid(self.ambient) then
+                self.ambient:Stop()
+            end
 
-                    mSongObj:SetVolume(iVolume)
-                    mSongObj:Play()
-                    self.ambient = mSongObj
+            mSongObj:SetVolume(iVolume)
+            mSongObj:Play()
+            self.ambient = mSongObj
 
-                    m_iAmbientCooldown = os.time() + mSongDuration + 10 -- presaver
-                    timer.Create('mAmbientMusicFinal', m_iAmbientCooldown, 1, function() -- should be timer.Simple?
-                        self:CreateAmbient()
-                    end)
-                end
+            m_iAmbientCooldown = os.time() + mSongDuration + 10 -- presaver
+            timer.Create('mAmbientMusicFinal', m_iAmbientCooldown, 1, function() -- should be timer.Simple?
+                bLoaded = false
+                self:CreateAmbient()
             end)
-        end
+        end)
+    
+        bLoaded = true
     end
 
     net.Receive('ixPlayAmbient', function()
-        if not timer.Exists('m_tAmbientChecker') then
-            timer.Create('m_tAmbientChecker', 0.5, 0, function()
-                if not IsValid(PLUGIN.ambient) then return end
-                if IsValid(ix.gui.characterMenu) && ix.config.Get('music') ~= '' then
-                    PLUGIN.ambient:SetVolume(0)
-                else
-                    if ix.option.Get('enableAmbient', true) then
-                        PLUGIN.ambient:SetVolume(ix.option.Get('ambientVolume', 1))
-                    end
-                end
-            end)
+        PLUGIN:CreateAmbient()
+        if timer.Exists('m_tAmbientChecker') then return end
+        if not ix.option.Get('enableAmbient', true) then return end
+        timer.Create('m_tAmbientChecker', 0.5, 0, function()
+            if not IsValid(PLUGIN.ambient) then return end
+            if IsValid(ix.gui.characterMenu) then
+                PLUGIN.ambient:SetVolume(0)
+            else
+                PLUGIN.ambient:SetVolume(ix.option.Get('ambientVolume', 1))
+            end
         end
     end)
 end
