@@ -28,16 +28,21 @@ if CLIENT then
 end
 
 function ITEM:RemoveOutfit(client)
-	local char = client:GetCharacter()
+	for k, _ in pairs(self.bodyGroups or {}) do
 
-	for k in pairs(self.bodyGroups) do
 		local index = client:FindBodygroupByName(k)
-		local groups = char:GetData('groups', {})
 
-		if index > -1 then
-			groups[index] = 0
-			char:SetData('groups', groups)
+		local char = client:GetCharacter()
+
+		if (index > -1) then
+
 			client:SetBodygroup(index, 0)
+			local groups = char:GetData("groups", {})
+
+			if (groups[index]) then
+				groups[index] = nil
+				char:SetData("groups", groups)
+			end
 		end
 	end
 
