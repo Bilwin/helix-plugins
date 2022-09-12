@@ -2,18 +2,19 @@
 -- TODO: Screen scaling
 local PLUGIN = PLUGIN
 function PLUGIN:LoadFonts(font, genericFont)
-    surface.CreateFont("ixRadio", {
-        font = 'Didact Gothic',
-        extended = true,
-        size = 30,
-        weight = 100,
-        shadow = true,
-        antialias = true
+    surface.CreateFont('ixRadio', {
+        font        = font,
+        extended    = true,
+        size        = 30,
+        weight      = 100,
+        shadow      = true,
+        antialias   = true
     })
 end
 
-net.Receive("ixRadio", function(_)
+net.Receive('ixRadio', function(_)
     local radio = net.ReadEntity()
+
     local frame = vgui.Create('DFrame')
     frame:SetSize( ScrW()*.25, ScrH()*.45 )
     frame:Center()
@@ -25,7 +26,7 @@ net.Receive("ixRadio", function(_)
 	frame:AlphaTo(255, 0.4, 0)
     frame.Paint = function( self, w, h )
         ix.util.DrawBlur(self, 4)
-        surface.SetDrawColor(ix.option.Get('color').r, ix.option.Get('color').g, ix.option.Get('color').b, 155)
+        surface.SetDrawColor(ix.config.Get('color').r, ix.config.Get('color').g, ix.config.Get('color').b, 155)
         surface.DrawOutlinedRect(0, 0, w, h)
     end
 
