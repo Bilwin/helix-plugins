@@ -1,4 +1,3 @@
-
 local function fm_snowcollide(particle, hitpos, normal)
 	particle:SetEndAlpha(200)
 	particle:SetStartSize(1)
@@ -11,8 +10,7 @@ function EFFECT:Init(data)
 	self.Spawnheight = data:GetRadius()
 
 	local emitter = ParticleEmitter(LocalPlayer():GetPos())
-
-	for i=0, math.Round(self.Magnitude) do
+	for i = 0, math.Round(self.Magnitude) do
 		local a = math.random(9999)
 		local b = math.random(1,180)
 		local distance = 2048
@@ -21,9 +19,9 @@ function EFFECT:Init(data)
 		local z = math.cos(b)*distance
 		local offset = Vector(x,y,self.Spawnheight)
 		local spawnpos = LocalPlayer():GetPos() + offset
-		local particle = emitter:Add("particle/snow", spawnpos)
-
-		if (particle) then
+	
+		local particle = emitter:Add('particle/snow', spawnpos)
+		if particle then
 			particle:SetVelocity(Vector(math.random(-400,400),math.random(-400,400),-300))
 			particle:SetRoll(math.random(-360,360))
 			particle:SetLifeTime(0)
@@ -39,7 +37,6 @@ function EFFECT:Init(data)
 			particle:SetBounce(.01)
 			particle:SetColor(255,255,255,255)
 		end
-
 	end
 
 	emitter:Finish()
