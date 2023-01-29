@@ -1,4 +1,3 @@
-
 PLUGIN.name         = 'Third-person view bind'
 PLUGIN.description  = 'Allows you toggle third-person view using bind'
 PLUGIN.author       = 'Bilwin'
