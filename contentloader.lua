@@ -1,9 +1,12 @@
-PLUGIN.name     = 'Content Loader'
-PLUGIN.author   = 'Bilwin'
+PLUGIN.name         = 'Content Loader'
+PLUGIN.description  = 'Automatically mount installed server content (host_workshop_collection)'
+PLUGIN.author       = 'Bilwin'
 
 if SERVER then
-    local workshop_items = engine.GetAddons()
-    for i = 1, #workshop_items do
-        resource.AddWorkshop(workshop_items[i].wsid)
+    function PLUGIN:Initialize()
+        local ws = engine.GetAddons()
+        for _, v in ipairs(ws) do
+            resource.AddWorkshop(v.wsid)
+        end
     end
 end
