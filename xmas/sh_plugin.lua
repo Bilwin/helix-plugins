@@ -1,4 +1,5 @@
-PLUGIN.name         = 'Xmas'
+PLUGIN.name         = 'Christmax'
+PLUGIN.description  = 'Funny things for the new year, steam from the mouth :?'
 PLUGIN.author       = 'Bilwin'
 
 -- for better experience
@@ -71,21 +72,20 @@ if CLIENT then
                 return true
             end
         })
-        LocalPlayer()._sf_insnow = true
+        LocalPlayer().m_bInSnow = true
 
         if tr.HitSky then
-            LocalPlayer()._sf_insnow = true
+            LocalPlayer().m_bInSnow = true
             local snow = EffectData()
             snow:SetMagnitude(15)
             snow:SetScale(3)
             snow:SetRadius(LocalPlayer():GetPos().z + 400)
             util.Effect('xmas_snow', snow)
         else
-            LocalPlayer()._sf_insnow = false
+            LocalPlayer().m_bInSnow = false
         end
 
         nextSnow = CurTime() + 0.15
     end
-
 end
 
