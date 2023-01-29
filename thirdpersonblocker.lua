@@ -1,5 +1,6 @@
-PLUGIN.name 	= 'Third-person Damage blocker'
-PLUGIN.author 	= 'Bilwin'
+PLUGIN.name 		= 'Third-person blocker'
+PLUGIN.description 	= 'Block a third-person view when taking damage'
+PLUGIN.author 		= 'Bilwin'
 
 if CLIENT then
     gameevent.Listen('player_hurt')
