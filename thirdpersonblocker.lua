@@ -6,16 +6,16 @@ if CLIENT then
     gameevent.Listen('player_hurt')
     hook.Add('player_hurt', PLUGIN.name, function(data)
         if data.userid == LocalPlayer():UserID() then
-            LocalPlayer().tpBlocked = true
+            LocalPlayer().m_bThirdPersonBlocked = true
             if timer.Exists('tpBlocker') then timer.Remove('tpBlocker') end
             timer.Create('tpBlocker', 30, 1, function()
-                LocalPlayer().tpBlocked = false
+                LocalPlayer().m_bThirdPersonBlocked = false
             end)
         end
     end)
 
 	local function isAllowed()
-		return ix.config.Get 'thirdperson'
+		return ix.config.Get('thirdperson')
 	end
 
     function PLAYER:CanOverrideView()
@@ -37,7 +37,7 @@ if CLIENT then
 			!self:GetNetVar 'actEnterAngle' &&
 			!IsValid(entity) &&
 			LocalPlayer():Alive() &&
-            !LocalPlayer().tpBlocked
+            !LocalPlayer().m_bThirdPersonBlocked
 			) then
 			return true
 		end
