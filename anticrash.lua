@@ -6,3 +6,9 @@ function PLUGIN:ShouldCollide(a, b)
         return false
     end
 end
+
+if SERVER then
+    function PLUGIN:OnItemSpawned(ent)
+        ent:SetCustomCollisionCheck(true)
+    end
+end
