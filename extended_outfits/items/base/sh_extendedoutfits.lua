@@ -28,24 +28,40 @@ if CLIENT then
 end
 
 function ITEM:RemoveOutfit(client)
-	self:SetData('equip', false)
-	if self.maxArmor then
+	for k, _ in pairs(self.bodyGroups or {}) do
+
+		local index = client:FindBodygroupByName(k)
+
+		local char = client:GetCharacter()
+
+		if (index > -1) then
+
+			client:SetBodygroup(index, 0)
+			local groups = char:GetData("groups", {})
+
+			if (groups[index]) then
+				groups[index] = nil
+				char:SetData("groups", groups)
+			end
+		end
+	end
+
+    if (self.newSkin) then
+		local char = client:GetCharacter()
+		if char:GetData('oldSkin' .. self.outfitCategory) then
+			client:SetSkin(char:GetData('oldSkin' .. self.outfitCategory))
+			char:SetData('oldSkin' .. self.outfitCategory, nil)
+		else
+			client:SetSkin(0)
+		end
+	end
+
+	if (self.maxArmor) then
 		self:SetData('armor', math.Clamp(client:Armor(), 0, self.maxArmor))
 		client:SetArmor(0)
 	end
 
-	for k in pairs(self.bodyGroups) do
-		local index = client:FindBodygroupByName(k)
-		local char = client:GetCharacter()
-		local groups = char:GetData('groups', {})
-
-		if index > -1 then
-			groups[index] = 0
-			char:SetData('groups', groups)
-			client:SetBodygroup(index, 0)
-		end
-	end
-
+	self:SetData('equip', false)
 	client:EmitSound('npc/footsteps/softshoe_generic6.wav')
 end
 
@@ -139,6 +155,11 @@ ITEM.functions.Equip = {
 					end
 				end
 			end
+		end
+
+		if (item.newSkin) then
+			char:SetData('oldSkin' .. item.outfitCategory, item.player:GetSkin())
+			item.player:SetSkin(item.newSkin)
 		end
 
 		client:EmitSound('npc/footsteps/softshoe_generic6.wav')

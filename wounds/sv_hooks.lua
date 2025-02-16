@@ -1,44 +1,27 @@
-
 local PLUGIN = PLUGIN
 
-PLUGIN.BulletDamages = {
-    [DMG_BULLET]    = true,
-    [DMG_SLASH]     = true,
-    [DMG_BLAST]     = true,
-    [DMG_AIRBOAT]   = true,
-    [DMG_BUCKSHOT]  = true,
-    [DMG_SNIPER]    = true,
-    [DMG_MISSILEDEFENSE] = true
-}
-
 function PLUGIN:EntityTakeDamage(target, info)
-    if ( target:IsValid() and target:IsPlayer() ) then
-        if ( self.BulletDamages[info:GetDamageType()] ) then
-            if ( math.random(10) > 7 ) then
+    if target:IsPlayer() then
+        if info:IsBulletDamage() then
+            if math.random(10) > 7 then -- 30% chance
                 self:SetBleeding(target, true)
             end
-        elseif ( info:GetDamageType() == DMG_FALL ) then
-            if math.random(10) > 7 then
-                self:SetFracture(target, true)
-            end
+        elseif info:GetDamageType() == DMG_FALL then
+            self:SetFractured(target, true)
         end
     end
 end
 
 function PLUGIN:PlayerLoadedCharacter(client, character)
-    if (!character:GetFracture()) then
-        self:SetFracture(client, false)
+    if not character:GetFractured() then
+        self:SetFractured(client, false)
+    else
+        self:SetFractured(client, true)
     end
 
-    if (!character:GetBleeding()) then
+    if not character:GetBleeding() then
         self:SetBleeding(client, false)
-    end
-
-    if (character:GetFracture()) then
-        self:SetFracture(client, true)
-    end
-
-    if (character:GetBleeding()) then
+    else
         self:SetBleeding(client, true)
     end
 end
@@ -67,13 +50,13 @@ function PLUGIN:SetBleeding(client, status)
     end
 end
 
-function PLUGIN:SetFracture(client, status)
+function PLUGIN:SetFractured(client, status)
     local character = client:GetCharacter()
     local bStatus = hook.Run("CanCharacterGetFracture", client, character)
     if (bStatus) then return end
     if !character then return end
 
-    character:SetFracture(status)
+    character:SetFractured(status)
     if (status) then
         client:SetWalkSpeed(ix.config.Get("walkSpeed", 100) / 1.4)
         client:SetRunSpeed(ix.config.Get("walkSpeed", 100) / 1.4)
@@ -84,7 +67,7 @@ function PLUGIN:SetFracture(client, status)
 end
 
 function PLUGIN:ClearWounds(client)
-    self:SetFracture(client, false)
+    self:SetFractured(client, false)
     self:SetBleeding(client, false)
 end
 

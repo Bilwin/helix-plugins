@@ -1,7 +1,7 @@
 PLUGIN.name     = 'StormFox 2 support'
 PLUGIN.author   = 'Bilwin'
 
-assert(StormFox2 ~= nil)
+if not StormFox2 then return end
 
 PLUGIN.maps = { -- Custom SF2 options
     ['rp_city34_v1a'] = {
