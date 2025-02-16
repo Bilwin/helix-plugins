@@ -1,5 +1,5 @@
 ## MIT License
-Copyright (c) 2025 Bilwin
+Copyright (c) 2025 me@bilw.in at [github/bilwin](https://github.com/bilwin)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
